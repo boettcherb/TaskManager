@@ -1,0 +1,97 @@
+/*
+Apply to all elements (* selector):
+- box-sizing: border-box → ensures width/height include padding + border
+  This makes layout math predictable (no unexpected overflow).
+- margin: 0 → removes default browser margins (e.g., <body> has margin by default)
+- padding: 0 → removes default padding for consistency
+*/
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/*
+Set a base font-size so rem units are predictable.
+Default browser = 16px, so we keep that explicitly.
+*/
+html {
+    font-size: 16px;
+}
+
+/*
+CSS variables
+ - Header height stored as a variable so layout stays consistent
+*/
+:root {
+    --header-height: 3.75rem;
+}
+
+/*
+Header
+ - `position: fixed` → remove element from normal document flow
+   and pins it relative to the viewport
+ - `top: 0` and `left: 0` → anchors header to top-left corner
+ - `width: 100%` → span full width of the viewport
+ - `height: var(--header-height)` → use CSS variable for consistency
+ - `display: flex` → enable flexbox layout for children
+ - `align-items: center` → vertically center content inside header
+ - `justify-content: center` → horizontally center content inside header
+ - `background` and `color` → set background and text color, respectively
+ - `z-index` → controls stacking order. Higher value ensures header stays
+   above other content
+*/
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--header-height);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #222;
+    color: white;
+    z-index: 1000;
+}
+
+/* 
+Main content area
+ - `display: flex` → enables horizontal layout for child panels
+ - `margin-top: var(--header-height)` → pushes content down to avoid being
+   hidden under the fixed header. Must match header height.
+ - `gap: 1rem` → adds space between the left and right panels (better than
+   using margins on the panels themselves)
+ - `padding: 1rem` → adds space inside the container edges for better aesthetics
+*/
+.main-content {
+    display: flex;
+    margin-top: var(--header-height);
+    gap: 1rem;
+    padding: 1rem;
+}
+
+/* 
+Panels: left and right
+ - `min-height` → ensures panels fill the viewport height minus header and padding
+ - `padding` → inner spacing for content inside panels
+ - `border` → visible outline around panels
+ - `border-radius` → rounded corners for better aesthetics
+ - `background-color` → sets panel background color
+ - `flex` → controls how much space each panel takes relative to the other. Left panel
+   takes twice as much space as the right panel (2:1 ratio).
+*/
+.left-panel,
+.right-panel {
+    min-height: calc(100vh - var(--header-height) - 2rem);
+    padding: 1rem;
+    border: 0.125rem solid black;
+    border-radius: 0.625rem;
+    background-color: #62c5ff;
+}
+.left-panel {
+    flex: 2;
+}
+.right-panel {
+    flex: 1;
+}
