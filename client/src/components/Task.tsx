@@ -4,21 +4,87 @@ interface TaskProps {
     task: TaskType;
 }
 
+function formatDate(dateString: string) {
+    return new Date(dateString).toLocaleDateString(undefined, {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+    });
+}
+
 function Task({ task }: TaskProps) {
+    const progressPercent =
+        task.type === "progress" && task.progress
+            ? Math.min((task.progress.current / task.progress.target) * 100, 100)
+            : 0;
+
+    const isCompleted = task.status === "completed";
+
     return (
-        <div className="task">
-            <h2>{task.title}</h2>
-            <p>Type: {task.type}</p>
-            <p>Status: {task.status}</p>
-            <p>Priority: {task.priority}</p>
-            <p>Created At: {new Date(task.createdAt).toLocaleString()}</p>
-            {task.dueDate && <p>Due Date: {new Date(task.dueDate).toLocaleString()}</p>}
+        <article className={`task ${isCompleted ? "task-completed" : ""}`}>
+            <div className="task-header">
+                <div>
+                    <h2 className="task-title">{task.title}</h2>
+                    <p className="task-created">
+                        Created {formatDate(task.createdAt)}
+                    </p>
+                </div>
+
+                <span className={`priority-tag priority-${task.priority}`}>
+                    {task.priority}
+                </span>
+            </div>
+
+            <div className="task-meta">
+                <span>{task.type}</span>
+                <span>{task.status}</span>
+                {task.dueDate && <span>Due {formatDate(task.dueDate)}</span>}
+            </div>
+
             {task.type === "progress" && task.progress && (
-                <p>
-                    Progress: {task.progress.current}/{task.progress.target} {task.progress.unit}
-                </p>
+                <div className="progress-section">
+                    <div className="progress-label">
+                        <span>Progress</span>
+                        <span>
+                            {task.progress.current}/{task.progress.target}{" "}
+                            {task.progress.unit}
+                        </span>
+                    </div>
+
+                    <div className="progress-bar">
+                        <div
+                            className="progress-fill"
+                            style={{ width: `${progressPercent}%` }}
+                        />
+                    </div>
+
+                    {isCompleted && (
+                        <span className="completion-badge completion-completed">
+                            ✔ Completed
+                        </span>
+                    )}
+                </div>
             )}
-        </div>
+
+            {task.type === "checkbox" && (
+                <div className="checkbox-section">
+                    <span
+                        className={`completion-badge ${
+                            isCompleted
+                                ? "completion-completed"
+                                : "completion-pending"
+                        }`}
+                    >
+                        {isCompleted ? "✔ Completed" : "✖ Not Completed"}
+                    </span>
+
+                    <label className="checkbox">
+                        Mark {isCompleted ? "Not Completed" : "Completed"}:
+                        <input type="checkbox" checked={isCompleted} readOnly />
+                    </label>
+                </div>
+            )}
+        </article>
     );
 }
 
