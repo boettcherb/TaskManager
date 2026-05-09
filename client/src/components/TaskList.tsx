@@ -1,7 +1,21 @@
+import { useState } from "react";
 import Task from "./Task";
 import { mockTasks } from "../data/mockTasks";
+import type { Task as TaskType } from "../types/Task";
 
 function TaskList() {
+    const [tasks, setTasks] = useState<TaskType[]>(mockTasks);
+
+    function toggleTaskStatus(taskId: string) {
+        setTasks((prevTasks) =>
+            prevTasks.map((task) =>
+                task.id === taskId
+                    ? { ...task, status: task.status === "todo" ? "completed" : "todo" }
+                    : task
+            )
+        );
+    }
+
     return (
         <section className="task-list-section">
             <div className="task-list-header">
@@ -9,7 +23,9 @@ function TaskList() {
                 <p>{mockTasks.length} tasks</p>
             </div>
             <div className="task-list">
-                {mockTasks.map((task) => (<Task key={task.id} task={task} />))}
+                {tasks.map((task) => (
+                    <Task key={task.id} task={task} onToggleStatus={toggleTaskStatus} />
+                ))}
             </div>
         </section>
     );

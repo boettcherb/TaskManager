@@ -2,6 +2,7 @@ import type { Task as TaskType } from "../types/Task";
 
 interface TaskProps {
     task: TaskType;
+    onToggleStatus?: (taskId: string) => void;
 }
 
 function formatDate(dateString: string) {
@@ -12,7 +13,7 @@ function formatDate(dateString: string) {
     });
 }
 
-function Task({ task }: TaskProps) {
+function Task({ task, onToggleStatus }: TaskProps) {
     const progressPercent =
         task.type === "progress" && task.progress
             ? Math.min((task.progress.current / task.progress.target) * 100, 100)
@@ -80,7 +81,11 @@ function Task({ task }: TaskProps) {
 
                     <label className="checkbox">
                         Mark {isCompleted ? "Not Completed" : "Completed"}:
-                        <input type="checkbox" checked={isCompleted} readOnly />
+                        <input
+                            type="checkbox"
+                            checked={isCompleted}
+                            onChange={() => onToggleStatus?.(task.id)}
+                        />
                     </label>
                 </div>
             )}
