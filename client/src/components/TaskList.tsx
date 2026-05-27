@@ -16,6 +16,19 @@ function TaskList() {
         );
     }
 
+    function updateTaskProgress(taskId: string, amount: number) {
+        setTasks((prevTasks) =>
+            prevTasks.map((task) => {
+                if (task.id !== taskId || task.type !== "progress" || !task.progress) {
+                    return task;
+                }
+                const newProgress = Math.max(0, task.progress.current + amount);
+                const newStatus = newProgress >= task.progress.target ? "completed" : "todo";
+                return { ...task, status: newStatus, progress: { ...task.progress, current: newProgress } };
+            })
+        );
+    }
+
     return (
         <section className="task-list-section">
             <div className="task-list-header">
@@ -24,7 +37,12 @@ function TaskList() {
             </div>
             <div className="task-list">
                 {tasks.map((task) => (
-                    <Task key={task.id} task={task} onToggleStatus={toggleTaskStatus} />
+                    <Task
+                        key={task.id}
+                        task={task}
+                        onToggleStatus={toggleTaskStatus}
+                        onUpdateProgress={updateTaskProgress}
+                    />
                 ))}
             </div>
         </section>

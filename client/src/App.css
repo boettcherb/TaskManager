@@ -392,3 +392,61 @@ Checkbox label:
     align-items: center;
     gap: 0.5rem;
 }
+
+/*
+Progress controls:
+- display: flex → places the input and buttons on one row.
+- align-items: center → vertically aligns the input and buttons.
+- gap → adds spacing between the controls.
+- margin-top → separates the controls from the progress bar/completion badge.
+*/
+.progress-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+/*
+Progress input:
+- width → keeps the number input compact.
+- padding → adds comfortable spacing inside the input.
+- border → gives the input a visible outline.
+- border-radius → slightly rounds the input corners.
+- font-size → keeps the input text readable.
+*/
+.progress-input {
+    width: 5rem;
+    padding: 0.35rem 0.5rem;
+    border: 0.125rem solid #1e293b;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+}
+
+/*
+Progress buttons:
+- width and height → make the plus/minus buttons square.
+- border → gives each button a visible outline.
+- border-radius → rounds the button corners.
+- background-color → gives the buttons a clean default background.
+- font-size and font-weight → make the plus/minus symbols easier to see.
+- cursor: pointer → shows that the buttons are clickable.
+*/
+.progress-button {
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 0.125rem solid #1e293b;
+    border-radius: 0.5rem;
+    background-color: white;
+    font-size: 1.25rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/*
+Progress button hover:
+- background-color → gives visual feedback when the user hovers over a button.
+*/
+.progress-button:hover {
+    background-color: #f1f5f9;
+}

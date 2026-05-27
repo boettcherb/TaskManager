@@ -1,8 +1,10 @@
+import { useState } from "react";
 import type { Task as TaskType } from "../types/Task";
 
 interface TaskProps {
     task: TaskType;
     onToggleStatus?: (taskId: string) => void;
+    onUpdateProgress?: (taskId: string, amount: number) => void;
 }
 
 function formatDate(dateString: string) {
@@ -13,13 +15,15 @@ function formatDate(dateString: string) {
     });
 }
 
-function Task({ task, onToggleStatus }: TaskProps) {
+function Task({ task, onToggleStatus, onUpdateProgress }: TaskProps) {
     const progressPercent =
         task.type === "progress" && task.progress
             ? Math.min((task.progress.current / task.progress.target) * 100, 100)
             : 0;
 
     const isCompleted = task.status === "completed";
+
+    const [progressInput, setProgressInput] = useState<number>(1);
 
     return (
         <article className={`task ${isCompleted ? "task-completed" : ""}`}>
@@ -59,6 +63,32 @@ function Task({ task, onToggleStatus }: TaskProps) {
                         />
                     </div>
 
+                    <div className="progress-controls">
+                        <input
+                            className="progress-input"
+                            type="number"
+                            min="1"
+                            value={progressInput}
+                            onChange={(event) => setProgressInput(Number(event.target.value))}
+                        />
+
+                        <button
+                            className="progress-button"
+                            type="button"
+                            onClick={() => onUpdateProgress?.(task.id, progressInput)}
+                        >
+                            +
+                        </button>
+
+                        <button
+                            className="progress-button"
+                            type="button"
+                            onClick={() => onUpdateProgress?.(task.id, -progressInput)}
+                        >
+                            -
+                        </button>
+                    </div>
+                    
                     {isCompleted && (
                         <span className="completion-badge completion-completed">
                             ✔ Completed
