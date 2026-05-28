@@ -1,0 +1,108 @@
+/*
+Task form:
+- display: flex → allows form fields to be stacked with flexbox.
+- flex-direction: column → places each field vertically.
+- gap → adds consistent spacing between form elements.
+*/
+.task-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/*
+Task form title:
+- font-size → makes the form heading visually clear.
+- margin-bottom → adds a little extra spacing below the title.
+*/
+.task-form-title {
+    font-size: 1.75rem;
+    margin-bottom: 0.25rem;
+}
+
+/*
+Form field:
+- display: flex → allows the label text and input to be arranged together.
+- flex-direction: column → places label text above the input.
+- gap → adds spacing between the label text and input.
+- font-weight → makes labels easier to scan.
+*/
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-weight: 700;
+}
+
+/*
+Form inputs and selects:
+- width: 100% → makes fields fill the available form width.
+- padding → adds comfortable inner spacing.
+- border → gives fields a clear outline.
+- border-radius → rounds the corners.
+- font-size → keeps typed text readable.
+*/
+.form-field input,
+.form-field select {
+    width: 100%;
+    padding: 0.5rem 0.625rem;
+    border: 0.125rem solid #1e293b;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+}
+
+/*
+Progress form section:
+- display: flex → stacks progress-specific fields.
+- flex-direction: column → keeps progress fields vertical.
+- gap → adds spacing between progress fields.
+- padding → visually groups the progress settings.
+- border → outlines the grouped section.
+- border-radius → rounds the section corners.
+- background-color → gives the section a subtle different background.
+*/
+.progress-form-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    border: 0.125rem solid #1e293b;
+    border-radius: 0.75rem;
+    background-color: #f8fafc;
+}
+
+/*
+Progress form title:
+- font-size → makes the subsection title smaller than the main title.
+*/
+.progress-form-title {
+    font-size: 1.2rem;
+}
+
+/*
+Submit button:
+- padding → makes the button comfortable to click.
+- border → gives the button a defined shape.
+- border-radius → rounds the corners.
+- background-color and color → style the primary action.
+- font-size and font-weight → make the button text clear.
+- cursor: pointer → shows the button is clickable.
+*/
+.task-form-submit {
+    padding: 0.625rem 1rem;
+    border: 0.125rem solid #1e293b;
+    border-radius: 0.5rem;
+    background-color: #222;
+    color: white;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/*
+Submit button hover:
+- background-color → gives visual feedback when hovering.
+*/
+.task-form-submit:hover {
+    background-color: #334155;
+}

@@ -1,0 +1,453 @@
+/*
+Apply to all elements (* selector):
+- box-sizing: border-box → ensures width/height include padding + border.
+  This makes layout math predictable and helps prevent overflow issues.
+- margin: 0 → removes default browser margins.
+- padding: 0 → removes default browser padding.
+*/
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/*
+html and body:
+- height: 100% → gives the page a full-height layout foundation.
+- font-size: 16px → establishes a standard root font size.
+- overflow: hidden → prevents the whole page from scrolling.
+  We want scrolling within the left panel only.
+*/
+html, body {
+    height: 100%;
+    font-size: 16px;
+    overflow: hidden;
+}
+
+/*
+CSS variables:
+- --header-height → stores header height in one place so the layout stays consistent.
+*/
+:root {
+    --header-height: 3.75rem;
+}
+
+/*
+Header:
+- position: fixed → removes the header from normal document flow and pins it
+  relative to the viewport.
+- top: 0 and left: 0 → anchor it to the top-left corner.
+- width: 100% → makes it span the full viewport width.
+- height: var(--header-height) → keeps header height consistent with layout math.
+- display: flex → enables flexbox for easy centering.
+- align-items: center → vertically centers the header content.
+- justify-content: center → horizontally centers the header content.
+- background and color → set visual styling.
+- z-index: 1000 → ensures the header stays above the rest of the page content.
+*/
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--header-height);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #222;
+    color: white;
+    z-index: 1000;
+}
+
+/*
+Main content area:
+- display: flex → lays out the left and right panels side by side.
+- margin-top: var(--header-height) → pushes content below the fixed header.
+- gap: 1rem → adds space between the panels.
+- padding: 1rem → adds space around the outer edges of the content area.
+*/
+.main-content {
+    display: flex;
+    margin-top: var(--header-height);
+    gap: 1rem;
+    padding: 1rem;
+}
+
+/*
+Panels: left and right
+- height → sets panel height to the viewport height minus:
+  1) the fixed header height
+  2) the vertical padding from .main-content (1rem top + 1rem bottom = 2rem)
+- padding → adds inner spacing for panel content.
+- border → adds a visible outline.
+- border-radius → rounds the corners.
+- background-color → sets the panel background color.
+*/
+.left-panel,
+.right-panel {
+    height: calc(100vh - var(--header-height) - 2rem);
+    padding: 1rem;
+    border: 0.125rem solid black;
+    border-radius: 0.625rem;
+    background-color: #62c5ff;
+}
+
+/*
+Left panel:
+- flex: 2 → takes twice as much horizontal space as the right panel.
+- overflow-y: auto → allows only this panel to scroll vertically when needed.
+*/
+.left-panel {
+    flex: 2;
+    overflow-y: auto;
+}
+
+/*
+Right panel:
+- flex: 1 → takes one share of available horizontal space.
+*/
+.right-panel {
+    flex: 1;
+    overflow-y: auto;
+}
+
+/*
+Task list section and task list container:
+- display: flex → allows tasks to be stacked using flexbox.
+- flex-direction: column → places children vertically instead of horizontally.
+- gap: 1rem → adds consistent spacing between the header/list and between tasks.
+*/
+.task-list-section,
+.task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/*
+Task list header:
+- display: flex → places the title and task count on the same row.
+- align-items: baseline → aligns the text based on the text baseline,
+  which looks cleaner when the elements have different font sizes.
+- justify-content: space-between → pushes the title to the left and task count to the right.
+*/
+.task-list-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+/*
+Individual task card:
+- padding → adds inner spacing inside each task card.
+- border → creates a visible outline around the task.
+- border-radius → rounds the corners.
+- background-color → sets the default task card background.
+- box-shadow → adds depth so each task looks like a raised card.
+*/
+.task {
+    padding: 1rem;
+    border: 0.125rem solid #1e293b;
+    border-radius: 1rem;
+    background-color: #f0f0f0;
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.32);
+}
+
+/*
+Completed task card:
+- background-color → gives completed tasks a light green background.
+- border-color → changes the border to green so completed tasks stand out.
+*/
+.task-completed {
+    background-color: #dcfce7;
+    border-color: #16a34a;
+}
+
+/*
+Task header:
+- display: flex → places the task title/date and priority tag on the same row.
+- justify-content: space-between → pushes the priority tag to the far right.
+- gap → keeps spacing between the left content and priority tag.
+- margin-bottom → separates the header from the task metadata below.
+*/
+.task-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+/*
+Task title:
+- font-size → makes the title larger than the supporting task details.
+- margin-bottom → adds a small gap between the title and created date.
+*/
+.task-title {
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+}
+
+/*
+Created date text:
+- font-size → makes the date slightly smaller than normal body text.
+- color → uses a muted color so it appears secondary to the title.
+*/
+.task-created {
+    font-size: 0.875rem;
+    color: #64748b;
+}
+
+/*
+Priority tag:
+- align-self: flex-start → keeps the tag only as tall as its content
+  instead of stretching.
+- padding → adds space inside the pill-shaped tag.
+- border-radius: 999rem → creates a fully rounded pill shape.
+- font-size → makes the tag text compact.
+- font-weight → makes the priority stand out.
+- text-transform: uppercase → displays priority values consistently.
+*/
+.priority-tag {
+    align-self: flex-start;
+    padding: 0.25rem 0.625rem;
+    border-radius: 999rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+/*
+Low priority styling:
+- background-color → light blue background.
+- color → darker blue text for contrast.
+*/
+.priority-low {
+    background-color: #dbeafe;
+    color: #1d4ed8;
+}
+
+/*
+Medium priority styling:
+- background-color → light yellow/orange background.
+- color → darker orange/brown text for contrast.
+*/
+.priority-medium {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+/*
+High priority styling:
+- background-color → light red background.
+- color → darker red text for contrast.
+*/
+.priority-high {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+/*
+Task metadata row:
+- display: flex → places metadata tags in a row.
+- flex-wrap: wrap → allows tags to move onto another line if space is limited.
+- gap → adds spacing between metadata tags.
+- margin-bottom → separates metadata from progress/checkbox content below.
+*/
+.task-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+/*
+Individual metadata tags:
+- padding → adds space inside each tag.
+- border-radius → slightly rounds each tag.
+- background-color → gives each tag a subtle background.
+- color → sets readable muted text.
+- font-size → keeps metadata visually secondary.
+- font-weight → makes metadata labels easier to scan.
+*/
+.task-meta span {
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+    background-color: #f1f5f9;
+    color: #334155;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+/*
+Progress section:
+- margin-top → separates progress content from metadata above.
+*/
+.progress-section {
+    margin-top: 0.75rem;
+}
+
+/*
+Progress label row:
+- display: flex → places the "Progress" label and numeric value on one row.
+- justify-content: space-between → pushes them to opposite sides.
+- margin-bottom → adds spacing between the label and progress bar.
+- font-size → keeps progress text slightly smaller than regular text.
+- font-weight → makes the label and value easier to read.
+*/
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.35rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+/*
+Progress bar container:
+- height → controls the thickness of the bar.
+- border-radius: 999rem → makes the bar fully rounded.
+- background-color → shows the unfilled portion of the bar.
+- overflow: hidden → clips the inner fill so it stays inside the rounded container.
+- margin-bottom → separates the bar from the completion badge below.
+*/
+.progress-bar {
+    height: 0.75rem;
+    border-radius: 999rem;
+    background-color: #e2e8f0;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+/*
+Progress bar fill:
+- height: 100% → makes the fill match the height of the progress bar.
+- border-radius: 999rem → keeps the fill rounded.
+- background-color → colors the completed portion of the bar.
+*/
+.progress-fill {
+    height: 100%;
+    border-radius: 999rem;
+    background-color: #2563eb;
+}
+
+/*
+Completion badge:
+- display: inline-block → allows padding and margin while only taking up needed width.
+- margin-top → adds spacing above the badge.
+- color → makes badge text white.
+- padding → adds inner spacing.
+- border-radius → rounds the badge corners.
+- font-size → keeps the badge compact.
+- font-weight → makes the status easier to notice.
+*/
+.completion-badge {
+    display: inline-block;
+    margin-top: 0.5rem;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+/*
+Completed badge:
+- background-color → green indicates the task is completed.
+*/
+.completion-completed {
+    background-color: #16a34a;
+}
+
+/*
+Pending badge:
+- background-color → red indicates the task is not completed.
+*/
+.completion-pending {
+    background-color: #b91c1c;
+}
+
+/*
+Checkbox task section:
+- display: flex → places the status badge and checkbox label on the same row.
+- align-items: center → vertically aligns the badge and checkbox label.
+- justify-content: space-between → pushes them to opposite sides of the card.
+- gap → keeps spacing between them if the layout gets narrow.
+- margin-top → separates checkbox controls from metadata above.
+*/
+.checkbox-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+/*
+Checkbox label:
+- display: flex → keeps the label text and checkbox input aligned.
+- align-items: center → vertically centers the text and checkbox.
+- gap → adds space between the label text and checkbox input.
+*/
+.checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/*
+Progress controls:
+- display: flex → places the input and buttons on one row.
+- align-items: center → vertically aligns the input and buttons.
+- gap → adds spacing between the controls.
+- margin-top → separates the controls from the progress bar/completion badge.
+*/
+.progress-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+/*
+Progress input:
+- width → keeps the number input compact.
+- padding → adds comfortable spacing inside the input.
+- border → gives the input a visible outline.
+- border-radius → slightly rounds the input corners.
+- font-size → keeps the input text readable.
+*/
+.progress-input {
+    width: 5rem;
+    padding: 0.35rem 0.5rem;
+    border: 0.125rem solid #1e293b;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+}
+
+/*
+Progress buttons:
+- width and height → make the plus/minus buttons square.
+- border → gives each button a visible outline.
+- border-radius → rounds the button corners.
+- background-color → gives the buttons a clean default background.
+- font-size and font-weight → make the plus/minus symbols easier to see.
+- cursor: pointer → shows that the buttons are clickable.
+*/
+.progress-button {
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 0.125rem solid #1e293b;
+    border-radius: 0.5rem;
+    background-color: white;
+    font-size: 1.25rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/*
+Progress button hover:
+- background-color → gives visual feedback when the user hovers over a button.
+*/
+.progress-button:hover {
+    background-color: #f1f5f9;
+}
