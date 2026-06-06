@@ -3,7 +3,7 @@ import Header from './components/Header.tsx';
 import TaskList from './components/TaskList.tsx';
 import TaskForm from './components/TaskForm.tsx';
 import './App.css';
-import type { Task } from "./types/Task.ts";
+import type { Task, CreatedTask } from "./types/Task.ts";
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -27,7 +27,7 @@ function App() {
   }, []);
 
   // Add new task by sending POST request to backend API
-  async function addTask(newTask: Task) {
+  async function addTask(newTask: CreatedTask) {
     try {
       const response = await fetch(`${API_URL}/tasks`, {
         method: "POST",

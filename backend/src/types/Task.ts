@@ -20,3 +20,5 @@ export interface Task {
   dueDate?: string;
   progress?: TaskProgress;
 }
+
+export type CreatedTask = Omit<Task, 'id' | 'createdAt' | 'status'>;

@@ -1,8 +1,8 @@
 import { useState } from "react";
-import type { Task, TaskPriority, TaskType } from "../types/Task";
+import type { CreatedTask, TaskPriority, TaskType } from "../types/Task";
 import "./TaskForm.css";
 
-function TaskForm({ onAddTask }: { onAddTask: (task: Task) => void }) {
+function TaskForm({ onAddTask }: { onAddTask: (task: CreatedTask) => void }) {
   const [title, setTitle] = useState("");
   const [type, setType] = useState<TaskType>("checkbox");
   const [priority, setPriority] = useState<TaskPriority>("medium");
@@ -13,13 +13,10 @@ function TaskForm({ onAddTask }: { onAddTask: (task: Task) => void }) {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const newTask: Task = {
-      id: crypto.randomUUID(),
+    const newTask: CreatedTask = {
       title,
       type,
-      status: 'todo',
       priority,
-      createdAt: new Date().toISOString(),
       dueDate: dueDate ? new Date(dueDate).toISOString() : undefined,
       progress:
         type === "progress"
