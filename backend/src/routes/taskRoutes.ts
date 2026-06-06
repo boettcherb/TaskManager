@@ -68,4 +68,37 @@ router.patch("/:id/status", (req, res) => {
 });
 
 
+// PATCH /tasks/:id/progress - Update the progress of a progress task
+// Called when user updates the progress for a task
+router.patch("/:id/progress", (req, res) => {
+    // Retrieve id from URL path and progress amount from request body
+    const { id } = req.params;
+    const { progress } = req.body;
+    // Validate that progress is a number
+    if (typeof progress !== "number") {
+        res.status(400).json({ error: "Progress amount must be a number" });
+        return;
+    }
+    // Find the task with the given ID
+    const task = tasks.find((t) => t.id === id);
+    // If task not found, return 404 error
+    if (!task) {
+        res.status(404).json({ error: "Task not found" });
+        return;
+    }
+    // Only allow progress updates for progress tasks, not checkbox tasks
+    if (task.type !== "progress" || !task.progress) {
+        res.status(400).json({
+            error: "Only progress tasks can have progress updated directly",
+        });
+        return;
+    }
+    // Update the task's progress and status and return the updated task
+    const newProgress = Math.max(0, task.progress.current + progress);
+    task.progress.current = newProgress;
+    task.status = newProgress >= task.progress.target ? "completed" : "todo";
+    res.json(task); // Default status is 200 for successful updates
+});
+
+
 export default router;

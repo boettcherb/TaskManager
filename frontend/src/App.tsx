@@ -68,17 +68,26 @@ function App() {
     }
   }
 
-  function updateTaskProgress(taskId: string, amount: number) {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) => {
-        if (task.id !== taskId || task.type !== "progress" || !task.progress) {
-          return task;
-        }
-        const newProgress = Math.max(0, task.progress.current + amount);
-        const newStatus = newProgress >= task.progress.target ? "completed" : "todo";
-        return { ...task, status: newStatus, progress: { ...task.progress, current: newProgress } };
-      })
-    );
+  // Update task progress by sending PATCH request to backend API
+  async function updateTaskProgress(taskId: string, amount: number) {
+    try {
+      const response = await fetch(`${API_URL}/tasks/${taskId}/progress`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ progress: amount }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to update task progress");
+      }
+      const updatedTask: Task = await response.json();
+      setTasks((currentTasks) =>
+        currentTasks.map((t) => (t.id === taskId ? updatedTask : t))
+      );
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
