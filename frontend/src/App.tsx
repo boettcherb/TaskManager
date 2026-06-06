@@ -1,36 +1,72 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from './components/Header.tsx';
 import TaskList from './components/TaskList.tsx';
 import TaskForm from './components/TaskForm.tsx';
 import './App.css';
 import type { Task as TaskType } from "./types/Task.ts";
-import { mockTasks } from "./data/mockTasks.ts";
 
 function App() {
-    const [tasks, setTasks] = useState<TaskType[]>(mockTasks);
+  const [tasks, setTasks] = useState<TaskType[]>([]);
 
-    function toggleTaskStatus(taskId: string) {
-        setTasks((prevTasks) =>
-            prevTasks.map((task) =>
-                task.id === taskId
-                    ? { ...task, status: task.status === "todo" ? "completed" : "todo" }
-                    : task
-            )
-        );
+  // Fetch tasks from backend API when component mounts
+  useEffect(() => {
+    async function loadTasks() {
+      try {
+        const response = await fetch("http://localhost:3000/tasks");
+        if (!response.ok) {
+          throw new Error("Failed to load tasks");
+        }
+        const tasksFromBackend: TaskType[] = await response.json();
+        setTasks(tasksFromBackend);
+      } catch (error) {
+        console.error(error);
+      }
     }
+    loadTasks();
+  }, []);
 
-    function updateTaskProgress(taskId: string, amount: number) {
-        setTasks((prevTasks) =>
-            prevTasks.map((task) => {
-                if (task.id !== taskId || task.type !== "progress" || !task.progress) {
-                    return task;
-                }
-                const newProgress = Math.max(0, task.progress.current + amount);
-                const newStatus = newProgress >= task.progress.target ? "completed" : "todo";
-                return { ...task, status: newStatus, progress: { ...task.progress, current: newProgress } };
-            })
-        );
+  // Add new task by sending POST request to backend API
+  async function addTask(newTask: TaskType) {
+    try {
+      const response = await fetch("http://localhost:3000/tasks", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newTask),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to add task");
+      }
+      const savedTask: TaskType = await response.json();
+      setTasks((currentTasks) => [savedTask, ...currentTasks]);
+    } catch (error) {
+      console.error(error);
     }
+  }
+
+  function toggleTaskStatus(taskId: string) {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === taskId
+          ? { ...task, status: task.status === "todo" ? "completed" : "todo" }
+          : task
+      )
+    );
+  }
+
+  function updateTaskProgress(taskId: string, amount: number) {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) => {
+        if (task.id !== taskId || task.type !== "progress" || !task.progress) {
+          return task;
+        }
+        const newProgress = Math.max(0, task.progress.current + amount);
+        const newStatus = newProgress >= task.progress.target ? "completed" : "todo";
+        return { ...task, status: newStatus, progress: { ...task.progress, current: newProgress } };
+      })
+    );
+  }
 
   return (
     <div className="app">
@@ -44,7 +80,7 @@ function App() {
           />
         </section>
         <section className="right-panel">
-          <TaskForm onAddTask={(newTask) => setTasks((prev) => [newTask, ...prev])} />
+          <TaskForm onAddTask={addTask} />
         </section>
       </main>
     </div>

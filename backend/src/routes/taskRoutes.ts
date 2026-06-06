@@ -1,10 +1,11 @@
 import express from "express";
 import type { Task } from "../types/Task.js";
+import { mockTasks } from "../data/mockTasks.js";
 
 const router = express.Router();
 
 // Hardcoded in-memory array of tasks to simulate a database for now
-let tasks: Task[] = [];
+let tasks: Task[] = [...mockTasks];
 
 // GET /tasks - Get all tasks
 // Called when TaskList component mounts to load existing tasks
