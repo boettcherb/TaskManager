@@ -1,16 +1,14 @@
 import TaskCard from "./TaskCard";
-import type { Task } from "../types/Task";
+import type { Task, TaskStatus } from "../types/Task";
 // import "./TaskList.css";
 
-function TaskList({
-  tasks,
-  onToggleStatus,
-  onUpdateProgress,
-}: {
+interface TaskListProps {
   tasks: Task[];
-  onToggleStatus: (taskId: string) => void;
-  onUpdateProgress: (taskId: string, progress: number) => void;
-}) {
+  onToggleStatus: (taskId: string, newStatus: TaskStatus) => void;
+  onUpdateProgress: (taskId: string, amount: number) => void;
+}
+
+function TaskList({ tasks, onToggleStatus, onUpdateProgress }: TaskListProps) {
   return (
     <section className="task-list-section">
       <div className="task-list-header">

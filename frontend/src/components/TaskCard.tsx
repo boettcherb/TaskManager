@@ -1,10 +1,10 @@
 import { useState } from "react";
-import type { Task as TaskType } from "../types/Task";
+import type { Task, TaskStatus } from "../types/Task";
 
-interface TaskProps {
-  task: TaskType;
-  onToggleStatus?: (taskId: string) => void;
-  onUpdateProgress?: (taskId: string, amount: number) => void;
+interface TaskCardProps {
+  task: Task;
+  onToggleStatus: (taskId: string, newStatus: TaskStatus) => void;
+  onUpdateProgress: (taskId: string, amount: number) => void;
 }
 
 function formatDate(dateString: string) {
@@ -15,7 +15,7 @@ function formatDate(dateString: string) {
   });
 }
 
-function TaskCard({ task, onToggleStatus, onUpdateProgress }: TaskProps) {
+function TaskCard({ task, onToggleStatus, onUpdateProgress }: TaskCardProps) {
   const progressPercent =
     task.type === "progress" && task.progress
       ? Math.min((task.progress.current / task.progress.target) * 100, 100)
@@ -75,7 +75,7 @@ function TaskCard({ task, onToggleStatus, onUpdateProgress }: TaskProps) {
             <button
               className="progress-button"
               type="button"
-              onClick={() => onUpdateProgress?.(task.id, progressInput)}
+              onClick={() => onUpdateProgress(task.id, progressInput)}
             >
               +
             </button>
@@ -83,7 +83,7 @@ function TaskCard({ task, onToggleStatus, onUpdateProgress }: TaskProps) {
             <button
               className="progress-button"
               type="button"
-              onClick={() => onUpdateProgress?.(task.id, -progressInput)}
+              onClick={() => onUpdateProgress(task.id, -progressInput)}
             >
               -
             </button>
@@ -112,7 +112,7 @@ function TaskCard({ task, onToggleStatus, onUpdateProgress }: TaskProps) {
             <input
               type="checkbox"
               checked={isCompleted}
-              onChange={() => onToggleStatus?.(task.id)}
+              onChange={() => onToggleStatus(task.id, isCompleted ? "todo" : "completed")}
             />
           </label>
         </div>

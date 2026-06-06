@@ -46,14 +46,26 @@ function App() {
     }
   }
 
-  function toggleTaskStatus(taskId: string) {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === taskId
-          ? { ...task, status: task.status === "todo" ? "completed" : "todo" }
-          : task
-      )
-    );
+  // Toggle task status by sending PATCH request to backend API
+  async function toggleTaskStatus(taskId: string, newStatus: string) {
+    try {
+      const response = await fetch(`${API_URL}/tasks/${taskId}/status`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to update task status");
+      }
+      const updatedTask: Task = await response.json();
+      setTasks((currentTasks) =>
+        currentTasks.map((t) => (t.id === taskId ? updatedTask : t))
+      );
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   function updateTaskProgress(taskId: string, amount: number) {
