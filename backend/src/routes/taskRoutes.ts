@@ -24,12 +24,13 @@ router.post("/", (req, res) => {
         ...(req.body as Task),
         id: crypto.randomUUID(),
         createdAt: new Date().toISOString(),
+        status: "todo",
     };
     // Add new task to the beginning of the array
     tasks.unshift(newTask);
     // 201 status: Successfully created new task
     // Return the newly created task in the response body so the frontend can
-    // update its state with the new task's ID and timestamp
+    // update its state with the new task's ID, timestamp, and status
     res.status(201).json(newTask);
 });
 
