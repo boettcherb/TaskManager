@@ -7,12 +7,13 @@ import type { Task as TaskType } from "./types/Task.ts";
 
 function App() {
   const [tasks, setTasks] = useState<TaskType[]>([]);
+  const API_URL = import.meta.env.VITE_API_URL;
 
   // Fetch tasks from backend API when component mounts
   useEffect(() => {
     async function loadTasks() {
       try {
-        const response = await fetch("http://localhost:3000/tasks");
+        const response = await fetch(`${API_URL}/tasks`);
         if (!response.ok) {
           throw new Error("Failed to load tasks");
         }
@@ -28,7 +29,7 @@ function App() {
   // Add new task by sending POST request to backend API
   async function addTask(newTask: TaskType) {
     try {
-      const response = await fetch("http://localhost:3000/tasks", {
+      const response = await fetch(`${API_URL}/tasks`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
