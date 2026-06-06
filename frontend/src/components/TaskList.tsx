@@ -1,5 +1,5 @@
-import Task from "./Task";
-import type { Task as TaskType } from "../types/Task";
+import TaskCard from "./TaskCard";
+import type { Task } from "../types/Task";
 // import "./TaskList.css";
 
 function TaskList({
@@ -7,7 +7,7 @@ function TaskList({
   onToggleStatus,
   onUpdateProgress,
 }: {
-  tasks: TaskType[];
+  tasks: Task[];
   onToggleStatus: (taskId: string) => void;
   onUpdateProgress: (taskId: string, progress: number) => void;
 }) {
@@ -19,7 +19,7 @@ function TaskList({
       </div>
       <div className="task-list">
         {tasks.map((task) => (
-          <Task
+          <TaskCard
             key={task.id}
             task={task}
             onToggleStatus={onToggleStatus}

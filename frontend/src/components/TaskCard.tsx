@@ -15,7 +15,7 @@ function formatDate(dateString: string) {
   });
 }
 
-function Task({ task, onToggleStatus, onUpdateProgress }: TaskProps) {
+function TaskCard({ task, onToggleStatus, onUpdateProgress }: TaskProps) {
   const progressPercent =
     task.type === "progress" && task.progress
       ? Math.min((task.progress.current / task.progress.target) * 100, 100)
@@ -121,4 +121,4 @@ function Task({ task, onToggleStatus, onUpdateProgress }: TaskProps) {
   );
 }
 
-export default Task;
+export default TaskCard;

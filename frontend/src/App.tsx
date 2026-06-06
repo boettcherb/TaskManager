@@ -3,10 +3,10 @@ import Header from './components/Header.tsx';
 import TaskList from './components/TaskList.tsx';
 import TaskForm from './components/TaskForm.tsx';
 import './App.css';
-import type { Task as TaskType } from "./types/Task.ts";
+import type { Task } from "./types/Task.ts";
 
 function App() {
-  const [tasks, setTasks] = useState<TaskType[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const API_URL = import.meta.env.VITE_API_URL;
 
   // Fetch tasks from backend API when component mounts
@@ -17,7 +17,7 @@ function App() {
         if (!response.ok) {
           throw new Error("Failed to load tasks");
         }
-        const tasksFromBackend: TaskType[] = await response.json();
+        const tasksFromBackend: Task[] = await response.json();
         setTasks(tasksFromBackend);
       } catch (error) {
         console.error(error);
@@ -27,7 +27,7 @@ function App() {
   }, []);
 
   // Add new task by sending POST request to backend API
-  async function addTask(newTask: TaskType) {
+  async function addTask(newTask: Task) {
     try {
       const response = await fetch(`${API_URL}/tasks`, {
         method: "POST",
@@ -39,7 +39,7 @@ function App() {
       if (!response.ok) {
         throw new Error("Failed to add task");
       }
-      const savedTask: TaskType = await response.json();
+      const savedTask: Task = await response.json();
       setTasks((currentTasks) => [savedTask, ...currentTasks]);
     } catch (error) {
       console.error(error);
