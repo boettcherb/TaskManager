@@ -38,7 +38,7 @@ router.post("/", (req, res) => {
 
 
 // PATCH /tasks/:id/status - Update the status of a checkbox task
-// Called when user toggles the checkbox for a task
+// Called when user toggles the checkbox for a checkbox task
 router.patch("/:id/status", (req, res) => {
     // Retrieve id from URL path and status from request body
     const { id } = req.params;
@@ -48,9 +48,8 @@ router.patch("/:id/status", (req, res) => {
         res.status(400).json({ error: "Invalid status value" });
         return;
     }
-    // Find the task with the given ID
+    // Find the task with the given ID. If not found, return 404 error
     const task = tasks.find((t) => t.id === id);
-    // If task not found, return 404 error
     if (!task) {
         res.status(404).json({ error: "Task not found" });
         return;
@@ -69,7 +68,7 @@ router.patch("/:id/status", (req, res) => {
 
 
 // PATCH /tasks/:id/progress - Update the progress of a progress task
-// Called when user updates the progress for a task
+// Called when user updates the progress for a progress task
 router.patch("/:id/progress", (req, res) => {
     // Retrieve id from URL path and progress amount from request body
     const { id } = req.params;
@@ -79,9 +78,8 @@ router.patch("/:id/progress", (req, res) => {
         res.status(400).json({ error: "Progress amount must be a number" });
         return;
     }
-    // Find the task with the given ID
+    // Find the task with the given ID. If not found, return 404 error
     const task = tasks.find((t) => t.id === id);
-    // If task not found, return 404 error
     if (!task) {
         res.status(404).json({ error: "Task not found" });
         return;
@@ -100,5 +98,64 @@ router.patch("/:id/progress", (req, res) => {
     res.json(task); // Default status is 200 for successful updates
 });
 
+
+// PATCH /tasks/:id - Update task details (title, priority, due date)
+router.patch("/:id", (req, res) => {
+    // Retrieve id from URL path and updated fields from request body
+    const { id } = req.params;
+    const { title, priority, dueDate } = req.body;
+    // Find the task with the given ID. If not found, return 404 error
+    const task = tasks.find((t) => t.id === id);
+    if (!task) {
+        res.status(404).json({ error: "Task not found" });
+        return;
+    }
+    // Validate and update fields if they are provided in the request body.
+    // If a field is not provided, it will not be updated
+    if (title !== undefined) {
+        // Validate that title is a non-empty string
+        if (typeof title !== "string" || title.trim() === "") {
+            res.status(400).json({ error: "Title must be a non-empty string" });
+            return;
+        }
+        task.title = title.trim();
+    }
+    if (priority !== undefined) {
+        // Validate that priority is one of the allowed values (low, medium, high)
+        if (!["low", "medium", "high"].includes(priority)) {
+            res.status(400).json({ error: "Invalid priority value" });
+            return;
+        }
+        task.priority = priority;
+    }
+    if (dueDate !== undefined) {
+        // Allow dueDate to be set to null to clear the due date. Otherwise,
+        // validate that it's a valid date string.
+        if (dueDate === null) {
+            task.dueDate = undefined;
+        } else {
+            const parsedDate = new Date(dueDate);
+            if (isNaN(parsedDate.getTime())) {
+                res.status(400).json({ error: "Invalid due date value" });
+                return;
+            }
+            task.dueDate = parsedDate.toISOString();
+        }
+    }
+    res.json(task);
+});
+
+
+// DELETE /tasks/:id - Delete a task
+router.delete("/:id", (req, res) => {
+    const { id } = req.params;
+    const originalLength = tasks.length;
+    tasks = tasks.filter((t) => t.id !== id);
+    if (tasks.length === originalLength) {
+        res.status(404).json({ error: "Task not found" });
+        return;
+    }
+    res.status(204).send(); // 204 No Content: indicates successful deletion with no response body
+});
 
 export default router;
