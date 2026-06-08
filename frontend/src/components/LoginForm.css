@@ -1,0 +1,77 @@
+/*
+Styles for Login Page:
+ - min-height: 100vh → ensure form takes up the full viewport height
+ - display: flex, align-items: center, justify-content: center → center the form
+ - padding: 1rem → spacing around the form
+*/
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+/*
+Styles for Login Form:
+ - width: min(90vw, 24rem) → responsive width with a max of 24rem
+ - display: flex, flex-direction: column, gap: 1rem → stack fields with spacing
+ - padding: 1.5rem → spacing inside the form
+ - border and border-radius → styled border and rounded corners
+ - background-color: #62c5ff → light blue background
+*/
+.login-form {
+    width: min(90vw, 24rem);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem;
+    border: 0.125rem solid #1e293b;
+    border-radius: 1rem;
+    background-color: #62c5ff;
+}
+
+/*
+Styles for Login Fields:
+ - display: flex, flex-direction: column, gap: 0.35rem → stack label and input with spacing
+ - font-weight: 700 → bold labels
+*/
+.login-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-weight: 700;
+}
+
+/*
+Styles for Login Inputs:
+ - padding: 0.5rem 0.625rem → spacing inside the input
+ - border and border-radius → styled border and rounded corners
+ - font-size: 1rem → standard font size
+*/
+.login-field input {
+    padding: 0.5rem 0.625rem;
+    border: 0.125rem solid #1e293b;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+}
+
+/*
+Styles for Login Button:
+ - padding: 0.625rem 1rem → spacing inside the button
+ - border and border-radius → styled border and rounded corners
+ - background-color: #222 → dark background
+ - color: white → white text
+ - font-size: 1rem, font-weight: 700 → standard size and bold text
+ - cursor: pointer → pointer cursor on hover
+*/
+.login-button {
+    padding: 0.625rem 1rem;
+    border: 0.125rem solid #1e293b;
+    border-radius: 0.5rem;
+    background-color: #222;
+    color: white;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+}
