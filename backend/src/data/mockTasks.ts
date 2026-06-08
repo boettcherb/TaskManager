@@ -3,6 +3,7 @@ import type { Task } from '../types/Task.js';
 export const mockTasks: Task[] = [
   {
     id: '1',
+    userId: 'user-2',
     title: 'Practice guitar',
     type: 'progress',
     status: 'todo',
@@ -17,6 +18,7 @@ export const mockTasks: Task[] = [
   },
   {
     id: '2',
+    userId: 'user-1',
     title: 'Work on task manager UI',
     type: 'progress',
     status: 'todo',
@@ -31,6 +33,7 @@ export const mockTasks: Task[] = [
   },
   {
     id: '3',
+    userId: 'user-2',
     title: 'Walk 10,000 steps',
     type: 'progress',
     status: 'todo',
@@ -45,6 +48,7 @@ export const mockTasks: Task[] = [
   },
   {
     id: '4',
+    userId: 'user-2',
     title: 'Buy groceries',
     type: 'checkbox',
     status: 'todo',
@@ -54,6 +58,7 @@ export const mockTasks: Task[] = [
   },
   {
     id: '5',
+    userId: 'user-1',
     title: 'Finish React lesson',
     type: 'checkbox',
     status: 'completed',
@@ -63,6 +68,7 @@ export const mockTasks: Task[] = [
   },
   {
     id: '6',
+    userId: 'user-1',
     title: 'Read 50 pages of clean code book',
     type: 'progress',
     status: 'todo',
@@ -76,6 +82,7 @@ export const mockTasks: Task[] = [
   },
   {
     id: '7',
+    userId: 'user-2',
     title: 'Schedule dentist appointment',
     type: 'checkbox',
     status: 'todo',
@@ -84,6 +91,7 @@ export const mockTasks: Task[] = [
   },
   {
     id: '8',
+    userId: 'user-1',
     title: 'Do laundry',
     type: 'checkbox',
     status: 'completed',
@@ -92,6 +100,7 @@ export const mockTasks: Task[] = [
   },
   {
     id: '9',
+    userId: 'user-1',
     title: 'Reply to emails',
     type: 'checkbox',
     status: 'todo',
@@ -100,6 +109,7 @@ export const mockTasks: Task[] = [
   },
   {
     id: '10',
+    userId: 'user-2',
     title: 'Study TypeScript',
     type: 'progress',
     status: 'completed',

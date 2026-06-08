@@ -12,6 +12,7 @@ export interface TaskProgress {
 
 export interface Task {
   id: string;
+  userId: string;
   title: string;
   type: TaskType;
   status: TaskStatus;
@@ -21,7 +22,7 @@ export interface Task {
   progress?: TaskProgress;
 }
 
-export type CreatedTask = Omit<Task, 'id' | 'createdAt' | 'status'>;
+export type CreatedTask = Omit<Task, 'id' | 'createdAt' | 'status' | 'userId'>;
 
 export interface EditTaskInput {
   title: string;
