@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import authRoutes from "./routes/authRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
 
 dotenv.config();
@@ -29,6 +30,11 @@ app.get("/health", (req, res) => {
         message: "Backend is running",
     });
 });
+
+// Auth routes
+// POST /login - Authenticate user and return JWT token
+
+app.use("/auth", authRoutes);
 
 // Task routes
 // GET /tasks - Get all tasks
