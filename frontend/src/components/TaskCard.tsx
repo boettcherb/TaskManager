@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { Task, TaskStatus } from "../types/Task";
+import "./TaskCard.css";
 
 interface TaskCardProps {
   task: Task;

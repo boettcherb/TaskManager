@@ -1,0 +1,26 @@
+/*
+Header:
+- position: fixed → removes the header from normal document flow and pins it
+  relative to the viewport.
+- top: 0 and left: 0 → anchor it to the top-left corner.
+- width: 100% → makes it span the full viewport width.
+- height: var(--header-height) → keeps header height consistent with layout math.
+- display: flex → enables flexbox for easy centering.
+- align-items: center → vertically centers the header content.
+- justify-content: center → horizontally centers the header content.
+- background and color → set visual styling.
+- z-index: 1000 → ensures the header stays above the rest of the page content.
+*/
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--header-height);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #222;
+    color: white;
+    z-index: 1000;
+}
