@@ -5,6 +5,15 @@ import TaskForm from './components/TaskForm.tsx';
 import './App.css';
 import type { Task, CreatedTask, EditTaskInput } from "./types/Task.ts";
 
+async function getErrorMessage(response: Response, defaultMessage: string) {
+  try {
+    const errorData = await response.json();
+    return errorData.error || defaultMessage;
+  } catch {
+    return defaultMessage;
+  }
+}
+
 function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const API_URL = import.meta.env.VITE_API_URL;
@@ -15,7 +24,7 @@ function App() {
       try {
         const response = await fetch(`${API_URL}/tasks`);
         if (!response.ok) {
-          throw new Error("Failed to load tasks");
+          throw new Error(await getErrorMessage(response, "Failed to load tasks"));
         }
         const tasksFromBackend: Task[] = await response.json();
         setTasks(tasksFromBackend);
@@ -37,7 +46,7 @@ function App() {
         body: JSON.stringify(newTask),
       });
       if (!response.ok) {
-        throw new Error("Failed to add task");
+        throw new Error(await getErrorMessage(response, "Failed to add task"));
       }
       const savedTask: Task = await response.json();
       setTasks((currentTasks) => [savedTask, ...currentTasks]);
@@ -57,7 +66,7 @@ function App() {
         body: JSON.stringify({ status: newStatus }),
       });
       if (!response.ok) {
-        throw new Error("Failed to update task status");
+        throw new Error(await getErrorMessage(response, "Failed to update task status"));
       }
       const updatedTask: Task = await response.json();
       setTasks((currentTasks) =>
@@ -79,7 +88,7 @@ function App() {
         body: JSON.stringify({ progress: amount }),
       });
       if (!response.ok) {
-        throw new Error("Failed to update task progress");
+        throw new Error(await getErrorMessage(response, "Failed to update task progress"));
       }
       const updatedTask: Task = await response.json();
       setTasks((currentTasks) =>
@@ -101,7 +110,7 @@ function App() {
         body: JSON.stringify(editedTask),
       });
       if (!response.ok) {
-        throw new Error("Failed to edit task");
+        throw new Error(await getErrorMessage(response, "Failed to edit task"));
       }
       const updatedTask: Task = await response.json();
       setTasks((currentTasks) =>
@@ -119,7 +128,7 @@ function App() {
         method: "DELETE",
       });
       if (!response.ok) {
-        throw new Error("Failed to delete task");
+        throw new Error(await getErrorMessage(response, "Failed to delete task"));
       }
       setTasks((currentTasks) => currentTasks.filter((t) => t.id !== taskId));
     } catch (error) {
