@@ -33,6 +33,7 @@ Task header:
 */
 .task-header {
     display: flex;
+    align-items: flex-start;
     justify-content: space-between;
     gap: 1rem;
     margin-bottom: 0.75rem;
@@ -59,6 +60,107 @@ Created date text:
 }
 
 /*
+Task actions row:
+- display: flex → places the edit and delete buttons on the same row.
+- align-items: flex-start → aligns buttons to the top of the card content.
+- gap → adds spacing between the buttons.
+- flex-shrink: 0 → prevents the buttons from shrinking if the card content gets long.
+*/
+.task-actions {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+/*
+Edit and delete buttons:
+- padding → adds space inside the buttons for better click targets.
+- border → gives the buttons a visible outline.
+- border-radius → rounds the button corners.
+- font-size and font-weight → make the button text easier to read.
+- line-height → keeps the button text vertically centered.
+- cursor: pointer → shows that the buttons are clickable.
+*/
+.edit-button,
+.delete-button {
+    padding: 0.25rem 0.75rem;
+    border: 0.125rem solid #1e293b;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.2;
+    cursor: pointer;
+}
+.edit-button {
+    background-color: white;
+}
+.delete-button {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+/*
+Task metadata row:
+- display: flex → places metadata tags in a row.
+- align-items: center → vertically aligns tags if they have different heights.
+- flex-wrap: wrap → allows tags to move onto another line if space is limited.
+- gap → adds spacing between metadata tags.
+- margin-bottom → separates metadata from progress/checkbox content below.
+*/
+.task-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+/*
+Individual metadata tags:
+- padding → adds space inside each tag.
+- border-radius → slightly rounds each tag.
+- background-color → gives each tag a subtle background.
+- color → sets readable muted text.
+- font-size → keeps metadata visually secondary.
+- font-weight → makes metadata labels easier to scan.
+*/
+.due-date-tag {
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+    background-color: #f1f5f9;
+    color: #334155;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+/*
+Completion badge:
+- display: inline-block → allows padding and margin while only taking up needed width.
+- color → makes badge text white.
+- padding → adds inner spacing.
+- border-radius → fully rounds the badge corners.
+- font-size → keeps the badge compact.
+- font-weight → makes the status easier to notice.
+*/
+.completion-badge {
+    display: inline-block;
+    color: white;
+    padding: 0.1rem 0.5rem;
+    border-radius: 999rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.completion-completed {
+    background-color: #16a34a;
+}
+
+.completion-pending {
+    background-color: #b91c1c;
+}
+
+/*
 Priority tag:
 - align-self: flex-start → keeps the tag only as tall as its content instead of stretching.
 - padding → adds space inside the pill-shaped tag.
@@ -71,7 +173,7 @@ Priority tag:
     align-self: flex-start;
     padding: 0.25rem 0.625rem;
     border-radius: 999rem;
-    font-size: 0.75rem;
+    font-size: .8rem;
     font-weight: 700;
     text-transform: uppercase;
 }
@@ -89,38 +191,6 @@ Priority tag:
 .priority-high {
     background-color: #fee2e2;
     color: #b91c1c;
-}
-
-/*
-Task metadata row:
-- display: flex → places metadata tags in a row.
-- flex-wrap: wrap → allows tags to move onto another line if space is limited.
-- gap → adds spacing between metadata tags.
-- margin-bottom → separates metadata from progress/checkbox content below.
-*/
-.task-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 0.75rem;
-}
-
-/*
-Individual metadata tags:
-- padding → adds space inside each tag.
-- border-radius → slightly rounds each tag.
-- background-color → gives each tag a subtle background.
-- color → sets readable muted text.
-- font-size → keeps metadata visually secondary.
-- font-weight → makes metadata labels easier to scan.
-*/
-.task-meta span {
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.5rem;
-    background-color: #f1f5f9;
-    color: #334155;
-    font-size: 0.875rem;
-    font-weight: 600;
 }
 
 /*
@@ -230,57 +300,11 @@ Progress buttons:
 }
 
 /*
-Completion badge:
-- display: inline-block → allows padding and margin while only taking up needed width.
-- margin-top → adds spacing above the badge.
-- color → makes badge text white.
-- padding → adds inner spacing.
-- border-radius → rounds the badge corners.
-- font-size → keeps the badge compact.
-- font-weight → makes the status easier to notice.
-*/
-.completion-badge {
-    display: inline-block;
-    margin-top: 0.5rem;
-    color: white;
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.5rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-}
-
-.completion-completed {
-    background-color: #16a34a;
-}
-
-.completion-pending {
-    background-color: #b91c1c;
-}
-
-/*
-Checkbox task section:
-- display: flex → places the status badge and checkbox label on the same row.
-- align-items: center → vertically aligns the badge and checkbox label.
-- justify-content: space-between → pushes them to opposite sides of the card.
-- gap → keeps spacing between them if the layout gets narrow.
-- margin-top → separates checkbox controls from metadata above.
+Checkbox section:
+- display: flex → places the checkbox and label on the same row.
+- gap → adds spacing between the checkbox and label.
 */
 .checkbox-section {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem;
-    margin-top: 0.75rem;
-}
-
-/*
-Checkbox label:
-- display: flex → keeps the label text and checkbox input aligned.
-- align-items: center → vertically centers the text and checkbox.
-- gap → adds space between the label text and checkbox input.
-*/
-.checkbox {
-    display: flex;
-    align-items: center;
     gap: 0.5rem;
 }

@@ -35,16 +35,28 @@ function TaskCard({ task, onToggleStatus, onUpdateProgress }: TaskCardProps) {
             Created {formatDate(task.createdAt)}
           </p>
         </div>
-
-        <span className={`priority-tag priority-${task.priority}`}>
-          {task.priority}
-        </span>
+        <div className="task-actions">
+          <button className="edit-button" type="button">
+            ✎ Edit
+          </button>
+          <button className="delete-button" type="button">
+            ✖ Delete
+          </button>
+        </div>
       </div>
 
       <div className="task-meta">
-        <span>{task.type}</span>
-        <span>{task.status}</span>
-        {task.dueDate && <span>Due {formatDate(task.dueDate)}</span>}
+        {task.dueDate && 
+          <span className="due-date-tag">
+            Due {formatDate(task.dueDate)}
+          </span>
+        }
+        <span className={`completion-badge completion-${isCompleted ? "completed" : "pending"}`}>
+          {isCompleted ? "✔ Completed" : "✖ Not Completed"}
+        </span>
+        <span className={`priority-tag priority-${task.priority}`}>
+          {task.priority}
+        </span>
       </div>
 
       {task.type === "progress" && task.progress && (
@@ -89,33 +101,17 @@ function TaskCard({ task, onToggleStatus, onUpdateProgress }: TaskCardProps) {
               -
             </button>
           </div>
-                  
-          {isCompleted && (
-            <span className="completion-badge completion-completed">
-              ✔ Completed
-            </span>
-          )}
         </div>
       )}
 
       {task.type === "checkbox" && (
         <div className="checkbox-section">
-          <span
-            className={`completion-badge ${
-              isCompleted ? "completion-completed" : "completion-pending"
-            }`}
-          >
-            {isCompleted ? "✔ Completed" : "✖ Not Completed"}
-          </span>
-
-          <label className="checkbox">
-            Mark {isCompleted ? "Not Completed" : "Completed"}:
-            <input
-              type="checkbox"
-              checked={isCompleted}
-              onChange={() => onToggleStatus(task.id, isCompleted ? "todo" : "completed")}
-            />
-          </label>
+          Mark {isCompleted ? "Not Completed" : "Completed"}:
+          <input
+            type="checkbox"
+            checked={isCompleted}
+            onChange={() => onToggleStatus(task.id, isCompleted ? "todo" : "completed")}
+          />
         </div>
       )}
     </article>
