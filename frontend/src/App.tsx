@@ -201,13 +201,19 @@ function App() {
     }
   }
 
+  function logout() {
+    setToken(null);
+    setUser(null);
+    setTasks([]);
+  }
+
   if (!token || !user) {
     return <LoginForm onLogin={login} />;
   }
 
   return (
     <div className="app">
-      <Header />
+      <Header username={user?.username} onLogout={logout} />
       <main className="main-content">
         <section className="left-panel">
           <TaskList

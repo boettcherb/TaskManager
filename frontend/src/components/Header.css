@@ -19,8 +19,53 @@ Header:
     height: var(--header-height);
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
+    padding: 0 1rem;
     background: #222;
     color: white;
     z-index: 1000;
+}
+
+/*
+Centered title:
+- position: absolute → removes the title from the flex layout.
+- left: 50% → moves its left edge to the middle of the header.
+- transform → shifts it back by half its own width, making it truly centered.
+*/
+.header-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/*
+Right-side user controls:
+- display: flex → places username and logout button on one row.
+- align-items: center → vertically centers them.
+- gap → adds spacing between username and button.
+- z-index: 1 → keeps controls above the absolutely centered title if they ever overlap.
+*/
+.header-user {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    z-index: 1;
+}
+
+/*
+Logout button:
+- padding → adds space inside the button for better clickability.
+- border and border-radius → styled border and rounded corners.
+- background-color and color → inverted colors for a standout button.
+- font-weight: 700 → bold text for emphasis.
+- cursor: pointer → changes cursor on hover to indicate it's clickable.
+*/
+.header-user button {
+    padding: 0.35rem 0.75rem;
+    border: 0.125rem solid white;
+    border-radius: 0.5rem;
+    background-color: white;
+    color: #222;
+    font-weight: 700;
+    cursor: pointer;
 }
