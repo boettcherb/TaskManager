@@ -33,5 +33,9 @@ app.get("/health", (req, res) => {
 // Task routes
 // GET /tasks - Get all tasks
 // POST /tasks - Create a new task
+// PATCH /tasks/:id/status - Update the status of a checkbox task
+// PATCH /tasks/:id/progress - Update the progress of a progress task
+// PATCH /tasks/:id - Update task details (title, due date, priority)
+// DELETE /tasks/:id - Delete a task
 
 app.use("/tasks", taskRoutes);
