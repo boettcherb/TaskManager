@@ -7,9 +7,10 @@ interface TaskListProps {
   onToggleStatus: (taskId: string, newStatus: TaskStatus) => void;
   onUpdateProgress: (taskId: string, amount: number) => void;
   onEditTask: (taskId: string, editedTask: EditTaskInput) => void;
+  onDeleteTask: (taskId: string) => void;
 }
 
-function TaskList({ tasks, onToggleStatus, onUpdateProgress, onEditTask }: TaskListProps) {
+function TaskList({ tasks, onToggleStatus, onUpdateProgress, onEditTask, onDeleteTask }: TaskListProps) {
   return (
     <section className="task-list-section">
       <div className="task-list-header">
@@ -24,6 +25,7 @@ function TaskList({ tasks, onToggleStatus, onUpdateProgress, onEditTask }: TaskL
             onToggleStatus={onToggleStatus}
             onUpdateProgress={onUpdateProgress}
             onEditTask={onEditTask}
+            onDeleteTask={onDeleteTask}
           />
         ))}
       </div>

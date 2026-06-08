@@ -7,6 +7,7 @@ interface TaskCardProps {
   onToggleStatus: (taskId: string, newStatus: TaskStatus) => void;
   onUpdateProgress: (taskId: string, amount: number) => void;
   onEditTask: (taskId: string, editedTask: EditTaskInput) => void;
+  onDeleteTask: (taskId: string) => void;
 }
 
 function formatDate(dateString: string) {
@@ -25,12 +26,11 @@ function toDateTimeLocalValue(dateString?: string) {
   return localDate.toISOString().slice(0, 16);
 }
 
-function TaskCard({ task, onToggleStatus, onUpdateProgress, onEditTask }: TaskCardProps) {
+function TaskCard({ task, onToggleStatus, onUpdateProgress, onEditTask, onDeleteTask }: TaskCardProps) {
   const progressPercent =
     task.type === "progress" && task.progress
       ? Math.min((task.progress.current / task.progress.target) * 100, 100)
       : 0;
-
   const isCompleted = task.status === "completed";
 
   const [progressInput, setProgressInput] = useState<number>(1);
@@ -62,6 +62,15 @@ function TaskCard({ task, onToggleStatus, onUpdateProgress, onEditTask }: TaskCa
     setIsEditModalOpen(false);
   }
 
+  function handleDelete() {
+    const confirmed = window.confirm(
+      `Are you sure you want to delete the task: "${task.title}"?`
+    );
+    if (confirmed) {
+      onDeleteTask(task.id);
+    }
+  }
+
   return (
     <article className={`task ${isCompleted ? "task-completed" : ""}`}>
       <div className="task-header">
@@ -75,7 +84,7 @@ function TaskCard({ task, onToggleStatus, onUpdateProgress, onEditTask }: TaskCa
           <button className="edit-button" type="button" onClick={openEditModal}>
             ✎ Edit
           </button>
-          <button className="delete-button" type="button">
+          <button className="delete-button" type="button" onClick={handleDelete}>
             ✖ Delete
           </button>
         </div>

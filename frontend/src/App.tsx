@@ -90,6 +90,7 @@ function App() {
     }
   }
 
+  // Edit task by sending PATCH request to backend API with edited task details
   async function editTask(taskId: string, editedTask: EditTaskInput) {
     try {
       const response = await fetch(`${API_URL}/tasks/${taskId}`, {
@@ -111,6 +112,21 @@ function App() {
     }
   }
 
+  // Delete task by sending DELETE request to backend API
+  async function deleteTask(taskId: string) {
+    try {
+      const response = await fetch(`${API_URL}/tasks/${taskId}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        throw new Error("Failed to delete task");
+      }
+      setTasks((currentTasks) => currentTasks.filter((t) => t.id !== taskId));
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <div className="app">
       <Header />
@@ -121,6 +137,7 @@ function App() {
             onToggleStatus={toggleTaskStatus}
             onUpdateProgress={updateTaskProgress}
             onEditTask={editTask}
+            onDeleteTask={deleteTask}
           />
         </section>
         <section className="right-panel">
