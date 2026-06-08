@@ -1,30 +1,38 @@
 import express from "express";
 import type { Task } from "../types/Task.js";
 import { mockTasks } from "../data/mockTasks.js";
+import { requireAuth } from "../middleware/authMiddleware.js";
+import type { AuthenticatedRequest } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
+router.use(requireAuth); // Apply authentication middleware to all task routes
 
 // Hardcoded in-memory array of tasks to simulate a database for now
 let tasks: Task[] = [...mockTasks];
 
 
-// GET /tasks - Get all tasks
+// GET /tasks - Get all tasks for the current user
 // Called when TaskList component mounts to load existing tasks
-// In the future, "get all tasks" will be replaced with "get only the user's tasks"
-// For now, all tasks are returned since we don't have user accounts
-router.get("/", (req, res) => {
-    res.json(tasks);
+router.get("/", (req: AuthenticatedRequest, res) => {
+    const userTasks = tasks.filter((task) => task.userId === req.user?.userId);
+    res.json(userTasks);
 });
 
 
 // POST /tasks - Create a new task
 // Called when user fills out the new task form and submits it
-router.post("/", (req, res) => {
+router.post("/", (req: AuthenticatedRequest, res) => {
+    // Ensure the user is authenticated and we have their user ID from the JWT
+    if (!req.user) {
+        res.status(401).json({ error: "Unauthorized" });
+        return;
+    }
     // TODO: Validate task data (title, type, priority, etc.)
     // Create new task with generated ID and current timestamp
     const newTask: Task = {
         ...(req.body as Task),
         id: crypto.randomUUID(),
+        userId: req.user.userId,
         createdAt: new Date().toISOString(),
         status: "todo",
     };
@@ -39,17 +47,18 @@ router.post("/", (req, res) => {
 
 // PATCH /tasks/:id/status - Update the status of a checkbox task
 // Called when user toggles the checkbox for a checkbox task
-router.patch("/:id/status", (req, res) => {
-    // Retrieve id from URL path and status from request body
+router.patch("/:id/status", (req: AuthenticatedRequest, res) => {
+    // Retrieve task ID, task status, and user ID from the request
     const { id } = req.params;
     const { status } = req.body;
+    const userId = req.user?.userId;
     // Validate that status is either "todo" or "completed"
     if (status !== "todo" && status !== "completed") {
         res.status(400).json({ error: "Invalid status value" });
         return;
     }
     // Find the task with the given ID. If not found, return 404 error
-    const task = tasks.find((t) => t.id === id);
+    const task = tasks.find((t) => t.id === id && t.userId === userId);
     if (!task) {
         res.status(404).json({ error: "Task not found" });
         return;
@@ -69,17 +78,18 @@ router.patch("/:id/status", (req, res) => {
 
 // PATCH /tasks/:id/progress - Update the progress of a progress task
 // Called when user updates the progress for a progress task
-router.patch("/:id/progress", (req, res) => {
-    // Retrieve id from URL path and progress amount from request body
+router.patch("/:id/progress", (req: AuthenticatedRequest, res) => {
+    // Retrieve task ID, task progress, and user ID from the request
     const { id } = req.params;
     const { progress } = req.body;
+    const userId = req.user?.userId;
     // Validate that progress is a number
     if (typeof progress !== "number") {
         res.status(400).json({ error: "Progress amount must be a number" });
         return;
     }
     // Find the task with the given ID. If not found, return 404 error
-    const task = tasks.find((t) => t.id === id);
+    const task = tasks.find((t) => t.id === id && t.userId === userId);
     if (!task) {
         res.status(404).json({ error: "Task not found" });
         return;
@@ -100,12 +110,13 @@ router.patch("/:id/progress", (req, res) => {
 
 
 // PATCH /tasks/:id - Update task details (title, priority, due date)
-router.patch("/:id", (req, res) => {
-    // Retrieve id from URL path and updated fields from request body
+router.patch("/:id", (req: AuthenticatedRequest, res) => {
+    // Retrieve task ID, task details, and user ID from the request
     const { id } = req.params;
     const { title, priority, dueDate } = req.body;
+    const userId = req.user?.userId;
     // Find the task with the given ID. If not found, return 404 error
-    const task = tasks.find((t) => t.id === id);
+    const task = tasks.find((t) => t.id === id && t.userId === userId);
     if (!task) {
         res.status(404).json({ error: "Task not found" });
         return;
@@ -147,10 +158,14 @@ router.patch("/:id", (req, res) => {
 
 
 // DELETE /tasks/:id - Delete a task
-router.delete("/:id", (req, res) => {
+router.delete("/:id", (req: AuthenticatedRequest, res) => {
+    // Retrieve task ID and user ID from the request
     const { id } = req.params;
+    const userId = req.user?.userId;
+    // Remove the task with the given ID from the array. If no task was
+    // removed, return 404 error (task not found or does not belong to user)
     const originalLength = tasks.length;
-    tasks = tasks.filter((t) => t.id !== id);
+    tasks = tasks.filter((t) => !(t.id === id && t.userId === userId));
     if (tasks.length === originalLength) {
         res.status(404).json({ error: "Task not found" });
         return;
