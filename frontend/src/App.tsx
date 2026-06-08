@@ -3,7 +3,7 @@ import Header from './components/Header.tsx';
 import TaskList from './components/TaskList.tsx';
 import TaskForm from './components/TaskForm.tsx';
 import './App.css';
-import type { Task, CreatedTask } from "./types/Task.ts";
+import type { Task, CreatedTask, EditTaskInput } from "./types/Task.ts";
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -90,6 +90,27 @@ function App() {
     }
   }
 
+  async function editTask(taskId: string, editedTask: EditTaskInput) {
+    try {
+      const response = await fetch(`${API_URL}/tasks/${taskId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(editedTask),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to edit task");
+      }
+      const updatedTask: Task = await response.json();
+      setTasks((currentTasks) =>
+        currentTasks.map((t) => (t.id === updatedTask.id ? updatedTask : t))
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <div className="app">
       <Header />
@@ -99,6 +120,7 @@ function App() {
             tasks={tasks}
             onToggleStatus={toggleTaskStatus}
             onUpdateProgress={updateTaskProgress}
+            onEditTask={editTask}
           />
         </section>
         <section className="right-panel">

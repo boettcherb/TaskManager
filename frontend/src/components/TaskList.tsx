@@ -1,14 +1,15 @@
 import TaskCard from "./TaskCard";
-import type { Task, TaskStatus } from "../types/Task";
+import type { Task, TaskStatus, EditTaskInput } from "../types/Task";
 import "./TaskList.css";
 
 interface TaskListProps {
   tasks: Task[];
   onToggleStatus: (taskId: string, newStatus: TaskStatus) => void;
   onUpdateProgress: (taskId: string, amount: number) => void;
+  onEditTask: (taskId: string, editedTask: EditTaskInput) => void;
 }
 
-function TaskList({ tasks, onToggleStatus, onUpdateProgress }: TaskListProps) {
+function TaskList({ tasks, onToggleStatus, onUpdateProgress, onEditTask }: TaskListProps) {
   return (
     <section className="task-list-section">
       <div className="task-list-header">
@@ -22,6 +23,7 @@ function TaskList({ tasks, onToggleStatus, onUpdateProgress }: TaskListProps) {
             task={task}
             onToggleStatus={onToggleStatus}
             onUpdateProgress={onUpdateProgress}
+            onEditTask={onEditTask}
           />
         ))}
       </div>

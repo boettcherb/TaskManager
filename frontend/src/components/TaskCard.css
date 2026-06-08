@@ -308,3 +308,142 @@ Checkbox section:
     display: flex;
     gap: 0.5rem;
 }
+
+/*
+Modal backdrop:
+- position: fixed → covers the whole viewport.
+- inset: 0 → shorthand for top/right/bottom/left: 0.
+- background-color → darkens the page behind the modal.
+- display: flex → allows centering the modal.
+- align-items / justify-content → centers the modal on screen.
+- z-index → keeps the modal above normal page content.
+*/
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+/*
+Edit modal:
+- width → gives the modal a readable size.
+- max-width → prevents it from getting too wide.
+- padding → adds inner spacing.
+- border / border-radius → gives the modal a card-like shape.
+- background-color → makes the modal stand out against the backdrop.
+*/
+.edit-modal {
+    width: min(90vw, 28rem);
+    padding: 1rem;
+    border: 0.125rem solid #1e293b;
+    border-radius: 1rem;
+    background-color: white;
+}
+
+/*
+Edit modal header:
+- display: flex → places title and close button on one row.
+- justify-content: space-between → pushes close button to the right.
+- align-items: center → vertically aligns title and button.
+- margin-bottom → separates header from form.
+*/
+.edit-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+/*
+Modal close button:
+- background and border → keeps close button visually lightweight.
+- font-size → makes the X easy to see.
+- cursor → shows it is clickable.
+*/
+.modal-close-button {
+    border: none;
+    background: none;
+    font-size: 1.25rem;
+    cursor: pointer;
+}
+
+/*
+Edit modal form:
+- display: flex → stacks fields.
+- flex-direction: column → puts each field on its own row.
+- gap → adds spacing between fields.
+*/
+.edit-modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/*
+Edit modal field:
+- display: flex → groups label text and input.
+- flex-direction: column → places label text above input.
+- gap → separates label from input.
+- font-weight → makes labels easier to scan.
+*/
+.edit-modal-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-weight: 700;
+}
+
+/*
+Edit modal inputs:
+- width → makes controls fill the modal width.
+- padding → gives comfortable inner spacing.
+- border / border-radius → gives controls a consistent shape.
+- font-size → keeps text readable.
+*/
+.edit-modal-field input,
+.edit-modal-field select {
+    width: 100%;
+    padding: 0.5rem 0.625rem;
+    border: 0.125rem solid #1e293b;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+}
+
+/*
+Edit modal actions:
+- display: flex → places buttons on one row.
+- justify-content: flex-end → moves buttons to the right.
+- gap → adds space between buttons.
+*/
+.edit-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+/*
+Modal action buttons:
+- padding → makes buttons comfortable to click.
+- border / border-radius → creates a consistent button shape.
+- font-weight → makes labels easier to read.
+- cursor → shows buttons are clickable.
+*/
+.modal-cancel-button,
+.modal-save-button {
+    padding: 0.5rem 0.875rem;
+    border: 0.125rem solid #1e293b;
+    border-radius: 0.5rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+.modal-cancel-button {
+    background-color: white;
+}
+.modal-save-button {
+    background-color: #222;
+    color: white;
+}

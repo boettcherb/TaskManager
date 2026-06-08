@@ -22,3 +22,9 @@ export interface Task {
 }
 
 export type CreatedTask = Omit<Task, 'id' | 'createdAt' | 'status'>;
+
+export interface EditTaskInput {
+  title: string;
+  dueDate?: string;
+  priority: TaskPriority;
+}
