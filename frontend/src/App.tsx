@@ -207,8 +207,12 @@ function App() {
     setTasks([]);
   }
 
+  function signup() {
+    console.log("Signup functionality not implemented yet");
+  }
+
   if (!token || !user) {
-    return <LoginForm onLogin={login} />;
+    return <LoginForm onLogin={login} onSignup={signup} />;
   }
 
   return (

@@ -3,21 +3,27 @@ import "./LoginForm.css";
 
 interface LoginFormProps {
   onLogin: (username: string, password: string) => void;
+  onSignup: (username: string, password: string) => void;
 }
 
-function LoginForm({ onLogin }: LoginFormProps) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+function LoginForm({ onLogin, onSignup }: LoginFormProps) {
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [login, setLogin] = useState<boolean>(true);
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    onLogin(username, password);
+    if (login) {
+      onLogin(username, password);
+    } else {
+      onSignup(username, password);
+    }
   }
 
   return (
     <main className="login-page">
       <form className="login-form" onSubmit={handleSubmit}>
-        <h1>Log In</h1>
+        <h1>{login ? "Log In" : "Sign Up"}</h1>
 
         <label className="login-field">
           <span>Username</span>
@@ -40,7 +46,10 @@ function LoginForm({ onLogin }: LoginFormProps) {
         </label>
 
         <button className="login-button" type="submit">
-          Log In
+          {login ? "Log In" : "Create Account"}
+        </button>
+        <button className="login-button" onClick={() => setLogin((current) => !current)}>
+          {login ? "Don't have an account? Sign Up" : "Already have an account? Log In"}
         </button>
       </form>
     </main>
