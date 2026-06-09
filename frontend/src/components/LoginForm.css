@@ -75,3 +75,17 @@ Styles for Login Button:
     font-weight: 700;
     cursor: pointer;
 }
+
+/*
+Styles for Error Message:
+ - color: rgb(147, 27, 27) → red color for errors
+ - font-weight: 700 → bold text
+ - text-align: center → center the error message
+ - font-size: 1.25rem → larger font size for visibility
+*/
+.error-message {
+    color: rgb(147, 27, 27);
+    font-weight: 700;
+    text-align: center;
+    font-size: 1.25rem;
+}

@@ -181,7 +181,8 @@ function App() {
   }
 
   // Log in user by sending POST request to backend API with username and password
-  async function login(username: string, password: string) {
+  // Return error message if login fails, or null if login is successful
+  async function login(username: string, password: string): Promise<string | null> {
     try {
       const response = await fetch(`${API_URL}/auth/login`, {
         method: "POST",
@@ -196,8 +197,10 @@ function App() {
       const data = await response.json();
       setToken(data.token);
       setUser(data.user);
+      return null; // No error message, login successful
     } catch (error) {
       console.error(error);
+      return error instanceof Error ? error.message : "An unknown error occurred";
     }
   }
 
@@ -207,7 +210,9 @@ function App() {
     setTasks([]);
   }
 
-  async function signup(username: string, password: string) {
+  // Sign up user by sending POST request to backend API with username and password.
+  // Return error message if sign up fails, or null if sign up is successful
+  async function signup(username: string, password: string): Promise<string | null> {
     try {
       const response = await fetch(`${API_URL}/auth/signup`, {
         method: "POST",
@@ -222,8 +227,9 @@ function App() {
       const data = await response.json();
       setToken(data.token);
       setUser(data.user);
+      return null; // No error message, sign up successful
     } catch (error) {
-      console.error(error);
+      return error instanceof Error ? error.message : "An unknown error occurred";
     }
   }
 

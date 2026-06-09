@@ -2,29 +2,28 @@ import { useState } from "react";
 import "./LoginForm.css";
 
 interface LoginFormProps {
-  onLogin: (username: string, password: string) => void;
-  onSignup: (username: string, password: string) => void;
+  onLogin: (username: string, password: string) => Promise<string | null>;
+  onSignup: (username: string, password: string) => Promise<string | null>;
 }
 
 function LoginForm({ onLogin, onSignup }: LoginFormProps) {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [login, setLogin] = useState<boolean>(true);
+  const [errorMessage, setErrorMessage] = useState<string | null>("");
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (login) {
-      onLogin(username, password);
-    } else {
-      onSignup(username, password);
-    }
+    setErrorMessage(login 
+      ? await onLogin(username, password)
+      : await onSignup(username, password)
+    );
   }
 
   return (
     <main className="login-page">
       <form className="login-form" onSubmit={handleSubmit}>
         <h1>{login ? "Log In" : "Sign Up"}</h1>
-
         <label className="login-field">
           <span>Username</span>
           <input
@@ -34,7 +33,6 @@ function LoginForm({ onLogin, onSignup }: LoginFormProps) {
             required
           />
         </label>
-
         <label className="login-field">
           <span>Password</span>
           <input
@@ -44,13 +42,13 @@ function LoginForm({ onLogin, onSignup }: LoginFormProps) {
             required
           />
         </label>
-
         <button className="login-button" type="submit">
           {login ? "Log In" : "Create Account"}
         </button>
-        <button className="login-button" onClick={() => setLogin((current) => !current)}>
+        <button className="login-button" type="button" onClick={() => setLogin((current) => !current)}>
           {login ? "Don't have an account? Sign Up" : "Already have an account? Log In"}
         </button>
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
       </form>
     </main>
   );
