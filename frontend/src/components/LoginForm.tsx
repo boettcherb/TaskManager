@@ -49,6 +49,7 @@ function LoginForm({ onLogin, onSignup }: LoginFormProps) {
           {login ? "Don't have an account? Sign Up" : "Already have an account? Log In"}
         </button>
         {errorMessage && <p className="error-message">{errorMessage}</p>}
+        {!login && <p className="info-message">Password reset is not available for this demo project. Remember your password!</p>}
       </form>
     </main>
   );

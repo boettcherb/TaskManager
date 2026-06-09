@@ -89,3 +89,17 @@ Styles for Error Message:
     text-align: center;
     font-size: 1.25rem;
 }
+
+/*
+Styles for Info Message:
+ - color: #1e293b → dark color for info
+ - font-weight: 700 → bold text
+ - text-align: center → center the info message
+ - font-size: 1rem → standard font size
+*/
+.info-message {
+    color: #1e293b;
+    font-weight: 700;
+    text-align: center;
+    font-size: 1rem;
+}
