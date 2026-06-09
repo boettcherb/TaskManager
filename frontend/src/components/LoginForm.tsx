@@ -20,6 +20,11 @@ function LoginForm({ onLogin, onSignup }: LoginFormProps) {
     );
   }
 
+  function changeForm() {
+    setLogin((current) => !current);
+    setErrorMessage(null);
+  }
+
   return (
     <main className="login-page">
       <form className="login-form" onSubmit={handleSubmit}>
@@ -45,11 +50,14 @@ function LoginForm({ onLogin, onSignup }: LoginFormProps) {
         <button className="login-button" type="submit">
           {login ? "Log In" : "Create Account"}
         </button>
-        <button className="login-button" type="button" onClick={() => setLogin((current) => !current)}>
+        <button className="login-button" type="button" onClick={changeForm}>
           {login ? "Don't have an account? Sign Up" : "Already have an account? Log In"}
         </button>
         {errorMessage && <p className="error-message">{errorMessage}</p>}
-        {!login && <p className="info-message">Password reset is not available for this demo project. Remember your password!</p>}
+        {!login && <p className="info-message">
+            Password reset is not available for this demo project. Remember your password!
+          </p>
+        }
       </form>
     </main>
   );
