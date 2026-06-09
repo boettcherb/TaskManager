@@ -72,14 +72,20 @@ router.post("/signup", async (req, res) => {
     // Retrieve username and password from request body
     const { username, password } = req.body;
     // Validate that username and password are provided and are strings and
-    // meet minimum length requirements. If validation fails, return 400 error
+    // meet length and char requirements. If validation fails, return 400 error
     if (typeof username !== "string" || typeof password !== "string") {
         res.status(400).json({ error: "Username and password are required" });
         return;
     }
     const normalizedUsername = username.trim().toLowerCase();
-    if (normalizedUsername.length < 3) {
-        res.status(400).json({ error: "Username must be at least 3 characters" });
+    if (normalizedUsername.length < 3 || normalizedUsername.length > 15) {
+        res.status(400).json({ error: "Username must be between 3 and 15 characters" });
+        return;
+    }
+    if (!/^[a-z0-9_-]+$/.test(normalizedUsername)) {
+        res.status(400).json({
+            error: "Username can only contain letters, numbers, underscores, and hyphens"
+        });
         return;
     }
     if (password.length < 6) {
