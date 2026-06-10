@@ -256,6 +256,30 @@ function App() {
     }
   }
 
+  // Delete account by sending DELETE request to backend API with current password for confirmation
+  async function deleteAccount(currentPassword: string) {
+    if (!token) {
+      alert("User is not authenticated");
+      return;
+    }
+    try {
+      const response = await fetch(`${API_URL}/auth/delete-account`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ currentPassword }),
+      });
+      if (!response.ok) {
+        throw new Error(await getErrorMessage(response, "Failed to delete account"));
+      }
+      logout(); // Clear user data and token from frontend after account deletion
+    } catch (error) {
+      alert(error instanceof Error ? error.message : "An unknown error occurred");
+    }
+  }
+
   if (!token || !user) {
     return <LoginForm onLogin={login} onSignup={signup} />;
   }
@@ -266,7 +290,7 @@ function App() {
         username={user?.username}
         onLogout={logout}
         onChangePassword={changePassword}
-        onDeleteAccount={() => {}}
+        onDeleteAccount={deleteAccount}
       />
       <main className="main-content">
         <section className="left-panel">

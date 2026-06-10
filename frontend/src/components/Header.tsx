@@ -5,7 +5,7 @@ interface HeaderProps {
   username: string;
   onLogout: () => void;
   onChangePassword: (oldPassword: string, newPassword: string) => void;
-  onDeleteAccount: () => void;
+  onDeleteAccount: (currentPassword: string) => void;
 }
 
 function Header({ username, onLogout, onChangePassword, onDeleteAccount }: HeaderProps) {
@@ -29,6 +29,12 @@ function Header({ username, onLogout, onChangePassword, onDeleteAccount }: Heade
     event.preventDefault();
     onChangePassword(currentPassword, newPassword);
     closePasswordModal();
+  }
+
+  function handleDeleteSubmit(event: React.FormEvent) {
+    event.preventDefault();
+    onDeleteAccount(currentPassword);
+    closeDeleteModal();
   }
 
   return (
@@ -85,24 +91,26 @@ function Header({ username, onLogout, onChangePassword, onDeleteAccount }: Heade
         <div className="modal-backdrop">
           <div className="header-modal">
             <h2>Confirm Account Deletion</h2>
-            <label className="header-modal-field">
-              <span>Enter Current Password:</span>
-              <input
-                type="password"
-                value={currentPassword}
-                onChange={(event) => setCurrentPassword(event.target.value)}
-                required
-              />
-            </label>
-            <p>Are you sure you want to delete your account? This action cannot be undone.</p>
-            <div className="header-modal-actions">
-              <button type="button" onClick={closeDeleteModal}>
-                Cancel
-              </button>
-              <button type="submit" onClick={onDeleteAccount}>
-                Delete Account
-              </button>
-            </div>
+            <form className="header-modal-form" onSubmit={handleDeleteSubmit}>
+              <label className="header-modal-field">
+                <span>Enter Current Password:</span>
+                <input
+                  type="password"
+                  value={currentPassword}
+                  onChange={(event) => setCurrentPassword(event.target.value)}
+                  required
+                />
+              </label>
+              <p>Are you sure you want to delete your account? This action cannot be undone.</p>
+              <div className="header-modal-actions">
+                <button type="button" onClick={closeDeleteModal}>
+                  Cancel
+                </button>
+                <button type="submit">
+                  Delete Account
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
