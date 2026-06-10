@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import type { User } from "../types/User.js";
 import type { AuthenticatedRequest } from "../middleware/authMiddleware.js";
 import { requireAuth } from "../middleware/authMiddleware.js";
-import { users } from "../data/store.js";
+import { users, deleteUser } from "../data/store.js";
 
 const router = express.Router();
 
@@ -152,7 +152,7 @@ router.patch("/change-password", async (req: AuthenticatedRequest, res) => {
     // Password validation: they must be strings, new password must be more than
     // 6 characters, and they must be different. If validation fails, return 400 error
     if (typeof oldPassword !== "string" || typeof newPassword !== "string") {
-        res.status(400).json({ error: "Passwords must be strings" });
+        res.status(400).json({ error: "Passwords are required" });
         return;
     }
     if (newPassword.length < 6) {
@@ -179,6 +179,38 @@ router.patch("/change-password", async (req: AuthenticatedRequest, res) => {
     // Hash the new password and update the user's passwordHash
     user.passwordHash = await bcrypt.hash(newPassword, 10);
     res.json({ message: "Password changed successfully" });
+});
+
+
+// DELETE /auth/delete-account - Delete the logged-in user's account
+// Called when user clicks "Delete Account" button in the header and confirms
+router.delete("/delete-account", async (req: AuthenticatedRequest, res) => {
+    // Retrieve current password from request body
+    const { currentPassword } = req.body;
+    // Ensure the password is provided and is a string. If not, return 400 error
+    if (typeof currentPassword !== "string") {
+        res.status(400).json({ error: "Password is required" });
+        return;
+    }
+    // Find the user by their ID. If user not found, return 404 error
+    const user = users.find((u) => u.id === req.user?.userId);
+    if (!user) {
+        res.status(404).json({ error: "User not found" });
+        return;
+    }
+    // Validate that the provided password matches the user's actual password. If
+    // password is incorrect, return 401 error
+    if (!(await bcrypt.compare(currentPassword, user.passwordHash))) {
+        res.status(401).json({ error: "Password is incorrect" });
+        return;
+    }
+    // Remove the user and all associated tasks from the data store. If
+    // deletion fails, return 500 error
+    if (!deleteUser(user.id)) {
+        res.status(500).json({ error: "Failed to delete user" });
+        return;
+    }
+    res.json({ message: "Account deleted successfully" });
 });
 
 export default router;
