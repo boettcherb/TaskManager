@@ -139,8 +139,8 @@ router.post("/signup", async (req, res) => {
 });
 
 
-// Every route below this middleware requires the user to be authenticated
-// with a valid JWT token
+// Every route below this middleware requires the user to be
+// authenticated with a valid JWT token
 router.use(requireAuth);
 
 
