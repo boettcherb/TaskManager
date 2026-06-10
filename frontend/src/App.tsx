@@ -233,13 +233,41 @@ function App() {
     }
   }
 
+  // Change password by sending POST request to backend API with old and new passwords
+  async function changePassword(oldPassword: string, newPassword: string) {
+    if (!token) {
+      alert("User is not authenticated");
+      return;
+    }
+    try {
+      const response = await fetch(`${API_URL}/auth/change-password`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ oldPassword, newPassword }),
+      });
+      if (!response.ok) {
+        throw new Error(await getErrorMessage(response, "Failed to change password"));
+      }
+    } catch (error) {
+      alert(error instanceof Error ? error.message : "An unknown error occurred");
+    }
+  }
+
   if (!token || !user) {
     return <LoginForm onLogin={login} onSignup={signup} />;
   }
 
   return (
     <div className="app">
-      <Header username={user?.username} onLogout={logout} />
+      <Header
+        username={user?.username}
+        onLogout={logout}
+        onChangePassword={changePassword}
+        onDeleteAccount={() => {}}
+      />
       <main className="main-content">
         <section className="left-panel">
           <TaskList

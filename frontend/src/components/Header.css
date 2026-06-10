@@ -69,3 +69,128 @@ Logout button:
     font-weight: 700;
     cursor: pointer;
 }
+
+/*
+Modal backdrop:
+- position: fixed and inset: 0 → covers the entire viewport.
+- display: flex → enables flexbox for centering the modal.
+- align-items: center → vertically centers the modal.
+- justify-content: center → horizontally centers the modal.
+- background-color → semi-transparent overlay.
+- z-index: 2000 → ensures the modal is above other content.
+*/
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.45);
+    z-index: 2000;
+}
+
+/*
+Password modal:
+- width → responsive width with a maximum limit.
+- padding → internal spacing.
+- border and border-radius → styled border and rounded corners.
+- background-color and color → set visual styling.
+*/
+.password-modal {
+    width: min(90vw, 28rem);
+    padding: 1.5rem;
+    border: 0.125rem solid #1e293b;
+    border-radius: 1rem;
+    background-color: white;
+    color: #1e293b;
+}
+
+/*
+Modal title:
+- margin-bottom → adds space below the title to separate it from the form.
+*/
+.password-modal h2 {
+    margin-bottom: 1rem;
+}
+
+/*
+Password modal form:
+- display: flex and flex-direction: column → stacks form fields vertically.
+- gap → adds space between form fields.
+*/
+.password-modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/*
+Password modal field:
+- display: flex and flex-direction: column → stacks label and input vertically.
+- gap → adds space between label and input.
+- font-weight → makes the label text bold.
+*/
+.password-modal-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-weight: 700;
+}
+
+/*
+Password modal input:
+- padding → adds space inside the input for better usability.
+- border and border-radius → styled border and rounded corners.
+- font-size → sets a comfortable text size for input.
+*/
+.password-modal-field input {
+    padding: 0.5rem 0.625rem;
+    border: 0.125rem solid #1e293b;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+}
+
+/*
+Password modal actions:
+- display: flex → lays out buttons in a row.
+- justify-content: flex-end → aligns buttons to the right.
+- gap → adds space between buttons.
+*/
+.password-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+/*
+Password modal buttons:
+- padding → adds space inside the buttons for better clickability.
+- border and border-radius → styled border and rounded corners.
+- font-weight → makes the button text bold.
+- cursor: pointer → changes cursor on hover to indicate they are clickable.
+*/
+.password-modal-actions button {
+    padding: 0.5rem 0.875rem;
+    border: 0.125rem solid #1e293b;
+    border-radius: 0.5rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/*
+Cancel button:
+- background-color and color → inverted colors for a standout cancel button.
+*/
+.password-modal-actions button[type="button"] {
+    background-color: white;
+    color: #1e293b;
+}
+
+/*
+Submit button:
+- background-color and color → inverted colors for a standout submit button.
+*/
+.password-modal-actions button[type="submit"] {
+    background-color: #222;
+    color: white;
+}
