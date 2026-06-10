@@ -32,7 +32,10 @@ app.get("/health", (req, res) => {
 });
 
 // Auth routes
-// POST /login - Authenticate user and return JWT token
+// POST /auth/login - Authenticate user and return JWT token
+// POST /auth/signup - Create a new user account and return JWT token
+// PATCH /auth/change-password - Change the logged-in user's password
+// DELETE /auth/delete-account - Delete the logged-in user's account and all their tasks
 
 app.use("/auth", authRoutes);
 
