@@ -1,21 +1,17 @@
 import express from "express";
 import type { Task } from "../types/Task.js";
-import { mockTasks } from "../data/mockTasks.js";
-import { requireAuth } from "../middleware/authMiddleware.js";
 import type { AuthenticatedRequest } from "../middleware/authMiddleware.js";
+import { requireAuth } from "../middleware/authMiddleware.js";
+import { tasks } from "../data/store.js";
 
 const router = express.Router();
 router.use(requireAuth); // Apply authentication middleware to all task routes
-
-// Hardcoded in-memory array of tasks to simulate a database for now
-let tasks: Task[] = [...mockTasks];
 
 
 // GET /tasks - Get all tasks for the current user
 // Called when TaskList component mounts to load existing tasks
 router.get("/", (req: AuthenticatedRequest, res) => {
-    const userTasks = tasks.filter((task) => task.userId === req.user?.userId);
-    res.json(userTasks);
+    res.json(tasks.filter((t) => t.userId === req.user?.userId));
 });
 
 
@@ -162,15 +158,15 @@ router.delete("/:id", (req: AuthenticatedRequest, res) => {
     // Retrieve task ID and user ID from the request
     const { id } = req.params;
     const userId = req.user?.userId;
-    // Remove the task with the given ID from the array. If no task was
-    // removed, return 404 error (task not found or does not belong to user)
-    const originalLength = tasks.length;
-    tasks = tasks.filter((t) => !(t.id === id && t.userId === userId));
-    if (tasks.length === originalLength) {
+    // Remove the task with the given ID. If not found, return 404 error
+    const taskIndex = tasks.findIndex((t) => t.id === id && t.userId === userId);
+    if (taskIndex === -1) {
         res.status(404).json({ error: "Task not found" });
         return;
     }
-    res.status(204).send(); // 204 No Content: indicates successful deletion with no response body
+    tasks.splice(taskIndex, 1);
+    // 204 No Content: indicates successful deletion with no response body
+    res.status(204).send();
 });
 
 export default router;

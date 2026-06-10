@@ -2,14 +2,11 @@ import express from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import type { User } from "../types/User.js";
-import { mockUsers } from "../data/mockUsers.js";
-import { requireAuth } from "../middleware/authMiddleware.js";
 import type { AuthenticatedRequest } from "../middleware/authMiddleware.js";
+import { requireAuth } from "../middleware/authMiddleware.js";
+import { users } from "../data/store.js";
 
 const router = express.Router();
-
-// Hardcoded in-memory array of users to simulate a database for now
-let users: User[] = [...mockUsers];
 
 
 // POST /login - Authenticate user and return JWT token
@@ -147,6 +144,8 @@ router.post("/signup", async (req, res) => {
 router.use(requireAuth);
 
 
+// PATCH /auth/change-password - Change the logged-in user's password
+// Called when user submits the change password form in the header
 router.patch("/change-password", async (req: AuthenticatedRequest, res) => {
     // Retrieve old password and new password from request body
     const { oldPassword, newPassword } = req.body;
