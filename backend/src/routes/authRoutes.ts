@@ -3,6 +3,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import type { User } from "../types/User.js";
 import { mockUsers } from "../data/mockUsers.js";
+import { requireAuth } from "../middleware/authMiddleware.js";
+import type { AuthenticatedRequest } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -31,8 +33,7 @@ router.post("/login", async (req, res) => {
     }
     // Check if provided password matches the stored password hash using bcrypt.
     // If password is invalid, return 401 error
-    const passwordIsValid = await bcrypt.compare(password, user.passwordHash);
-    if (!passwordIsValid) {
+    if (!(await bcrypt.compare(password, user.passwordHash))) {
         res.status(401).json({ error: "Invalid username or password" });
         return;
     }
@@ -138,6 +139,47 @@ router.post("/signup", async (req, res) => {
             createdAt: newUser.createdAt,
         },
     });
+});
+
+
+// Every route below this middleware requires the user to be authenticated
+// with a valid JWT token
+router.use(requireAuth);
+
+
+router.patch("/change-password", async (req: AuthenticatedRequest, res) => {
+    // Retrieve old password and new password from request body
+    const { oldPassword, newPassword } = req.body;
+    // Password validation: they must be strings, new password must be more than
+    // 6 characters, and they must be different. If validation fails, return 400 error
+    if (typeof oldPassword !== "string" || typeof newPassword !== "string") {
+        res.status(400).json({ error: "Passwords must be strings" });
+        return;
+    }
+    if (newPassword.length < 6) {
+        res.status(400).json({ error: "Password must be at least 6 characters" });
+        return;
+    }
+    if (oldPassword === newPassword) {
+        res.status(400).json({
+            error: "New password must be different from old password"
+        });
+        return;
+    }
+    // Find the user by their ID. If user not found, return 404 error
+    const user = users.find((u) => u.id === req.user?.userId);
+    if (!user) {
+        res.status(404).json({ error: "User not found" });
+        return;
+    }
+    // Validate that oldPassword matches the user's actual password
+    if (!(await bcrypt.compare(oldPassword, user.passwordHash))) {
+        res.status(401).json({ error: "Old password is incorrect" });
+        return;
+    }
+    // Hash the new password and update the user's passwordHash
+    user.passwordHash = await bcrypt.hash(newPassword, 10);
+    res.json({ message: "Password changed successfully" });
 });
 
 export default router;
