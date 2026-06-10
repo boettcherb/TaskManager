@@ -11,13 +11,16 @@ function LoginForm({ onLogin, onSignup }: LoginFormProps) {
   const [password, setPassword] = useState<string>("");
   const [login, setLogin] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string | null>("");
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setIsSubmitting(true);
     setErrorMessage(login 
       ? await onLogin(username, password)
       : await onSignup(username, password)
     );
+    setIsSubmitting(false);
   }
 
   function changeForm() {
@@ -47,11 +50,14 @@ function LoginForm({ onLogin, onSignup }: LoginFormProps) {
             required
           />
         </label>
-        <button className="login-button" type="submit">
-          {login ? "Log In" : "Create Account"}
+        <button className="login-button" type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Please wait..." : (login ? "Log In" : "Create Account") }
         </button>
-        <button className="login-button" type="button" onClick={changeForm}>
-          {login ? "Don't have an account? Sign Up" : "Already have an account? Log In"}
+        <button className="login-button" type="button" onClick={changeForm} disabled={isSubmitting}>
+          {isSubmitting
+            ? "Please wait..."
+            : (login ? "Don't have an account? Sign Up" : "Already have an account? Log In")
+          }
         </button>
         {errorMessage && <p className="error-message">{errorMessage}</p>}
         {!login && <p className="info-message">
