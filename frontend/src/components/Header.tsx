@@ -10,6 +10,7 @@ interface HeaderProps {
 
 function Header({ username, onLogout, onChangePassword, onDeleteAccount }: HeaderProps) {
   const [passwordModalOpen, setPasswordModalOpen] = useState<boolean>(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const [currentPassword, setCurrentPassword] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
 
@@ -17,6 +18,11 @@ function Header({ username, onLogout, onChangePassword, onDeleteAccount }: Heade
     setPasswordModalOpen(false);
     setCurrentPassword("");
     setNewPassword("");
+  }
+
+  function closeDeleteModal() {
+    setDeleteModalOpen(false);
+    setCurrentPassword("");
   }
 
   function handlePasswordSubmit(event: React.FormEvent) {
@@ -36,16 +42,16 @@ function Header({ username, onLogout, onChangePassword, onDeleteAccount }: Heade
         <button type="button" onClick={() => setPasswordModalOpen(true)}>
           Change Password
         </button>
-        <button type="button" onClick={onDeleteAccount}>
+        <button type="button" onClick={() => setDeleteModalOpen(true)}>
           Delete Account
         </button>
       </div>
       {passwordModalOpen && (
         <div className="modal-backdrop">
-          <div className="password-modal">
+          <div className="header-modal">
             <h2>Change Password</h2>
-            <form className="password-modal-form" onSubmit={handlePasswordSubmit}>
-              <label className="password-modal-field">
+            <form className="header-modal-form" onSubmit={handlePasswordSubmit}>
+              <label className="header-modal-field">
                 <span>Current Password</span>
                 <input
                   type="password"
@@ -54,7 +60,7 @@ function Header({ username, onLogout, onChangePassword, onDeleteAccount }: Heade
                   required
                 />
               </label>
-              <label className="password-modal-field">
+              <label className="header-modal-field">
                 <span>New Password</span>
                 <input
                   type="password"
@@ -63,7 +69,7 @@ function Header({ username, onLogout, onChangePassword, onDeleteAccount }: Heade
                   required
                 />
               </label>
-              <div className="password-modal-actions">
+              <div className="header-modal-actions">
                 <button type="button" onClick={closePasswordModal}>
                   Cancel
                 </button>
@@ -72,6 +78,31 @@ function Header({ username, onLogout, onChangePassword, onDeleteAccount }: Heade
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+      {deleteModalOpen && (
+        <div className="modal-backdrop">
+          <div className="header-modal">
+            <h2>Confirm Account Deletion</h2>
+            <label className="header-modal-field">
+              <span>Enter Current Password:</span>
+              <input
+                type="password"
+                value={currentPassword}
+                onChange={(event) => setCurrentPassword(event.target.value)}
+                required
+              />
+            </label>
+            <p>Are you sure you want to delete your account? This action cannot be undone.</p>
+            <div className="header-modal-actions">
+              <button type="button" onClick={closeDeleteModal}>
+                Cancel
+              </button>
+              <button type="submit" onClick={onDeleteAccount}>
+                Delete Account
+              </button>
+            </div>
           </div>
         </div>
       )}

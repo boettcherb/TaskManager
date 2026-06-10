@@ -90,13 +90,13 @@ Modal backdrop:
 }
 
 /*
-Password modal:
+Header modal:
 - width → responsive width with a maximum limit.
 - padding → internal spacing.
 - border and border-radius → styled border and rounded corners.
 - background-color and color → set visual styling.
 */
-.password-modal {
+.header-modal {
     width: min(90vw, 28rem);
     padding: 1.5rem;
     border: 0.125rem solid #1e293b;
@@ -106,31 +106,31 @@ Password modal:
 }
 
 /*
-Modal title:
+Header modal title:
 - margin-bottom → adds space below the title to separate it from the form.
 */
-.password-modal h2 {
+.header-modal h2 {
     margin-bottom: 1rem;
 }
 
 /*
-Password modal form:
+Header modal form:
 - display: flex and flex-direction: column → stacks form fields vertically.
 - gap → adds space between form fields.
 */
-.password-modal-form {
+.header-modal-form {
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
 
 /*
-Password modal field:
+Header modal field:
 - display: flex and flex-direction: column → stacks label and input vertically.
 - gap → adds space between label and input.
 - font-weight → makes the label text bold.
 */
-.password-modal-field {
+.header-modal-field {
     display: flex;
     flex-direction: column;
     gap: 0.35rem;
@@ -138,12 +138,12 @@ Password modal field:
 }
 
 /*
-Password modal input:
+Header modal input:
 - padding → adds space inside the input for better usability.
 - border and border-radius → styled border and rounded corners.
 - font-size → sets a comfortable text size for input.
 */
-.password-modal-field input {
+.header-modal-field input {
     padding: 0.5rem 0.625rem;
     border: 0.125rem solid #1e293b;
     border-radius: 0.5rem;
@@ -151,25 +151,25 @@ Password modal input:
 }
 
 /*
-Password modal actions:
+Header modal actions:
 - display: flex → lays out buttons in a row.
 - justify-content: flex-end → aligns buttons to the right.
 - gap → adds space between buttons.
 */
-.password-modal-actions {
+.header-modal-actions {
     display: flex;
     justify-content: flex-end;
     gap: 0.5rem;
 }
 
 /*
-Password modal buttons:
+Header modal buttons:
 - padding → adds space inside the buttons for better clickability.
 - border and border-radius → styled border and rounded corners.
 - font-weight → makes the button text bold.
 - cursor: pointer → changes cursor on hover to indicate they are clickable.
 */
-.password-modal-actions button {
+.header-modal-actions button {
     padding: 0.5rem 0.875rem;
     border: 0.125rem solid #1e293b;
     border-radius: 0.5rem;
@@ -181,7 +181,7 @@ Password modal buttons:
 Cancel button:
 - background-color and color → inverted colors for a standout cancel button.
 */
-.password-modal-actions button[type="button"] {
+.header-modal-actions button[type="button"] {
     background-color: white;
     color: #1e293b;
 }
@@ -190,7 +190,7 @@ Cancel button:
 Submit button:
 - background-color and color → inverted colors for a standout submit button.
 */
-.password-modal-actions button[type="submit"] {
+.header-modal-actions button[type="submit"] {
     background-color: #222;
     color: white;
 }
