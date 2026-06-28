@@ -1,10 +1,9 @@
+import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
+import { pool } from "./db/pool.js";
 import authRoutes from "./routes/authRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
-
-dotenv.config();
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
@@ -19,6 +18,7 @@ app.listen(PORT, () => {
 // Routes:
 // GET / - Basic API info
 // GET /health - Health check endpoint
+// GET /debug/db - Debug endpoint to check database connection
 
 app.get("/", (req, res) => {
     res.send("Smart Task Manager API");
@@ -29,6 +29,11 @@ app.get("/health", (req, res) => {
         status: "ok",
         message: "Backend is running",
     });
+});
+
+app.get("/debug/db", async (req, res) => {
+  const result = await pool.query("SELECT NOW() AS current_time");
+  res.json(result.rows[0]);
 });
 
 // Auth routes

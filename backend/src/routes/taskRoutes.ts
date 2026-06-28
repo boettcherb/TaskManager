@@ -3,6 +3,7 @@ import type { Task } from "../types/Task.js";
 import type { AuthenticatedRequest } from "../middleware/authMiddleware.js";
 import { requireAuth } from "../middleware/authMiddleware.js";
 import { tasks } from "../data/store.js";
+import { getTasksByUserId } from "../db/taskRepository.js";
 
 const router = express.Router();
 router.use(requireAuth); // Apply authentication middleware to all task routes
@@ -10,8 +11,14 @@ router.use(requireAuth); // Apply authentication middleware to all task routes
 
 // GET /tasks - Get all tasks for the current user
 // Called when TaskList component mounts to load existing tasks
-router.get("/", (req: AuthenticatedRequest, res) => {
-    res.json(tasks.filter((t) => t.userId === req.user?.userId));
+router.get("/", async (req: AuthenticatedRequest, res) => {
+    // Ensure the user is authenticated and we have their user ID from the JWT
+    if (!req.user) {
+        res.status(401).json({ error: "Unauthorized" });
+        return;
+    }
+    const tasks = await getTasksByUserId(req.user.userId);
+    res.json(tasks);
 });
 
 
