@@ -1,9 +1,9 @@
 import express from "express";
-import type { Task } from "../types/Task.js";
+import type { Task, CreatedTask } from "../types/Task.js";
 import type { AuthenticatedRequest } from "../middleware/authMiddleware.js";
 import { requireAuth } from "../middleware/authMiddleware.js";
 import { tasks } from "../data/store.js";
-import { getTasksByUserId } from "../db/taskRepository.js";
+import * as taskDb from "../db/taskRepository.js";
 
 const router = express.Router();
 router.use(requireAuth); // Apply authentication middleware to all task routes
@@ -17,30 +17,24 @@ router.get("/", async (req: AuthenticatedRequest, res) => {
         res.status(401).json({ error: "Unauthorized" });
         return;
     }
-    const tasks = await getTasksByUserId(req.user.userId);
+    // Fetch tasks from the database for the authenticated user
+    const tasks = await taskDb.getTasksByUserId(req.user.userId);
     res.json(tasks);
 });
 
 
 // POST /tasks - Create a new task
 // Called when user fills out the new task form and submits it
-router.post("/", (req: AuthenticatedRequest, res) => {
+router.post("/", async (req: AuthenticatedRequest, res) => {
     // Ensure the user is authenticated and we have their user ID from the JWT
     if (!req.user) {
         res.status(401).json({ error: "Unauthorized" });
         return;
     }
     // TODO: Validate task data (title, type, priority, etc.)
-    // Create new task with generated ID and current timestamp
-    const newTask: Task = {
-        ...(req.body as Task),
-        id: crypto.randomUUID(),
-        userId: req.user.userId,
-        createdAt: new Date().toISOString(),
-        status: "todo",
-    };
-    // Add new task to the beginning of the array
-    tasks.unshift(newTask);
+    // Create the new task in the database for the authenticated user
+    const taskData: CreatedTask = req.body;
+    const newTask = await taskDb.createTask(req.user.userId, taskData);
     // 201 status: Successfully created new task
     // Return the newly created task in the response body so the frontend can
     // update its state with the new task's ID, timestamp, and status
