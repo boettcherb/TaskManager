@@ -36,7 +36,7 @@ function TaskCard({ task, onToggleStatus, onUpdateProgress, onEditTask, onDelete
   const [progressInput, setProgressInput] = useState<number>(1);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editedTitle, setEditedTitle] = useState(task.title);
-  const [editedDueDate, setEditedDueDate] = useState(toDateTimeLocalValue(task.dueDate));
+  const [editedDueDate, setEditedDueDate] = useState<string>(toDateTimeLocalValue(task.dueDate));
   const [editedPriority, setEditedPriority] = useState<TaskPriority>(task.priority);
 
   function openEditModal() {
@@ -54,9 +54,7 @@ function TaskCard({ task, onToggleStatus, onUpdateProgress, onEditTask, onDelete
     event.preventDefault();
     onEditTask(task.id, {
       title: editedTitle,
-      dueDate: editedDueDate
-        ? new Date(editedDueDate).toISOString()
-        : undefined,
+      dueDate: editedDueDate === "" ? null : new Date(editedDueDate).toISOString(),
       priority: editedPriority,
     });
     setIsEditModalOpen(false);

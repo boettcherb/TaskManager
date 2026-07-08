@@ -26,6 +26,6 @@ export type CreatedTask = Omit<Task, 'id' | 'createdAt' | 'status' | 'userId'>;
 
 export interface EditTaskInput {
   title: string;
-  dueDate?: string;
+  dueDate: string | null;
   priority: TaskPriority;
 }

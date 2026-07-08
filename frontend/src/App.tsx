@@ -117,7 +117,7 @@ function App() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ progress: amount }),
+        body: JSON.stringify({ amount }),
       });
       if (!response.ok) {
         throw new Error(await getErrorMessage(response, "Failed to update task progress"));
@@ -133,6 +133,7 @@ function App() {
 
   // Edit task by sending PATCH request to backend API with edited task details
   async function editTask(taskId: string, editedTask: EditTaskInput) {
+    console.log("Editing task:", taskId, editedTask);
     if (!token) {
       console.error("User is not authenticated");
       return;

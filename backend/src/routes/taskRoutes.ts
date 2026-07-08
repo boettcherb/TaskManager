@@ -90,17 +90,17 @@ router.patch("/:id/status", async (req: AuthenticatedRequest, res) => {
 // Called when user updates the progress for a progress task
 router.patch("/:id/progress", async (req: AuthenticatedRequest, res) => {
     try {
-        // Retrieve task ID, task progress, and user ID from the request
+        // Retrieve task ID, task progress amount, and user ID from the request
         const { id } = req.params;
-        const { progress } = req.body;
+        const { amount } = req.body;
         const userId = req.user!.userId;
         // Validate that task ID is provided and is a string (not string[])
         if (typeof id !== "string") {
             res.status(400).json({ error: "Task ID is required" });
             return;
         }
-        // Validate that progress is a number
-        if (typeof progress !== "number") {
+        // Validate that amount is a number
+        if (typeof amount !== "number") {
             res.status(400).json({ error: "Progress amount must be a number" });
             return;
         }
@@ -117,8 +117,8 @@ router.patch("/:id/progress", async (req: AuthenticatedRequest, res) => {
             });
             return;
         }
-        // Update the task's progress and status and return the updated task
-        const newProgress = Math.max(0, task.progress.current + progress);
+        // Update the task's progress amount and status and return the updated task
+        const newProgress = Math.max(0, task.progress.current + amount);
         const newStatus = newProgress >= task.progress.target ? "completed" : "todo";
         const updatedTask = await taskDb.updateTask(id, userId, {
             progress: { ...task.progress, current: newProgress },
@@ -171,7 +171,7 @@ router.patch("/:id", async (req: AuthenticatedRequest, res) => {
             // Allow dueDate to be set to null to clear the due date. Otherwise,
             // validate that it's a valid date string.
             if (dueDate === null) {
-                updates.dueDate = undefined;
+                updates.dueDate = null;
             } else {
                 const parsedDate = new Date(dueDate);
                 if (isNaN(parsedDate.getTime())) {
