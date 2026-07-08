@@ -2,8 +2,7 @@ import express from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import type { User } from "../types/User.js";
-import type { AuthenticatedRequest } from "../middleware/authMiddleware.js";
-import { requireAuth } from "../middleware/authMiddleware.js";
+import { requireAuth, AuthenticatedRequest } from "../middleware/authMiddleware.js";
 import { users, deleteUser } from "../data/store.js";
 
 const router = express.Router();
