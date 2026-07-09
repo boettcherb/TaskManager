@@ -1,6 +1,43 @@
 import { pool } from "./pool.js";
-import { mapDbTaskRowToTask } from "./mapper.js";
 import type { Task, CreatedTask } from "../types/Task.js";
+
+
+interface DbTaskRow {
+    id: string;
+    user_id: string;
+    title: string;
+    task_type: Task["type"];
+    status: Task["status"];
+    priority: Task["priority"];
+    created_at: Date;
+    due_date: Date | null;
+    progress_current: number | null;
+    progress_target: number | null;
+    progress_unit: string | null;
+}
+
+
+export function mapDbTaskRowToTask(row: DbTaskRow): Task {
+    return {
+        id: row.id,
+        userId: row.user_id,
+        title: row.title,
+        type: row.task_type,
+        status: row.status,
+        priority: row.priority,
+        createdAt: row.created_at.toISOString(),
+        dueDate: row.due_date ? row.due_date.toISOString() : undefined,
+        progress:
+            row.task_type === "progress"
+                ? {
+                    current: row.progress_current ?? 0,
+                    target: row.progress_target ?? 1,
+                    unit: row.progress_unit ?? undefined,
+                }
+                : undefined,
+    };
+}
+
 
 export async function getTasksByUserId(userId: string): Promise<Task[]> {
     const query = `
@@ -8,8 +45,7 @@ export async function getTasksByUserId(userId: string): Promise<Task[]> {
         WHERE user_id = $1
         ORDER BY created_at DESC
     `;
-    const values = [userId];
-    const result = await pool.query(query, values);
+    const result = await pool.query(query, [userId]);
     return result.rows.map(mapDbTaskRowToTask);
 }
 
@@ -19,8 +55,7 @@ export async function getTaskById(taskId: string, userId: string): Promise<Task 
         SELECT * FROM tasks
         WHERE id = $1 AND user_id = $2
     `;
-    const values = [taskId, userId];
-    const result = await pool.query(query, values);
+    const result = await pool.query(query, [taskId, userId]);
     if (result.rows.length === 0) {
         return null; // Task not found
     }
@@ -125,7 +160,6 @@ export async function deleteTask(taskId: string, userId: string): Promise<boolea
         DELETE FROM tasks
         WHERE id = $1 AND user_id = $2
     `;
-    const values = [taskId, userId];
-    const result = await pool.query(query, values);
+    const result = await pool.query(query, [taskId, userId]);
     return result.rowCount == 1; // Return true if a row was deleted, false otherwise
 }
