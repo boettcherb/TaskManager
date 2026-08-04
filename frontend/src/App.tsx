@@ -28,6 +28,15 @@ function App() {
 
   const API_URL = import.meta.env.VITE_API_URL;
 
+  // Update document title based on user login status
+  useEffect(() => {
+    if (user) {
+      document.title = `Task App - ${user.username}`;
+    } else {
+      document.title = "Task App";
+    }
+  }, [user]);
+
   // Fetch tasks from backend API when component mounts
   useEffect(() => {
     if (!token) {
