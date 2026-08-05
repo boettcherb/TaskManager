@@ -79,7 +79,7 @@ function TaskForm({ onAddTask }: { onAddTask: (task: CreatedTask) => void }) {
       </label>
 
       <label className="form-field">
-        <span>Due Date</span>
+        <span>Due Date (optional)</span>
         <input
           type="datetime-local"
           value={dueDate}
