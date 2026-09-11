@@ -5,8 +5,11 @@ import authRoutes from "./routes/authRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
 import { generalApiLimiter, authLimiter } from "./middleware/rateLimitMiddleware.js";
 
-const app = express();
 const PORT = Number(process.env.PORT) || 3000;
+const app = express();
+
+// Render runs the app behind a proxy; trust one proxy hop so rate limiting uses the real client IP.
+app.set("trust proxy", 1);
 
 app.use(cors());            // Enable CORS for all routes
 app.use(express.json());    // Parse incoming JSON requests for all routes
