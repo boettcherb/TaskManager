@@ -1,24 +1,24 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import { pool } from "./db/pool.js";
 import authRoutes from "./routes/authRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
+import { generalApiLimiter, authLimiter } from "./middleware/rateLimitMiddleware.js";
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
 
-app.use(cors());
-app.use(express.json());
+app.use(cors());            // Enable CORS for all routes
+app.use(express.json());    // Parse incoming JSON requests for all routes
+app.use(generalApiLimiter); // Apply general API rate limiting to all routes
 
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server is running on port ${PORT}`);
 });
 
 // Routes:
 // GET / - Basic API info
 // GET /health - Health check endpoint
-// GET /debug/db - Debug endpoint to check database connection
 
 app.get("/", (req, res) => {
     res.send("Smart Task Manager API");
@@ -31,18 +31,13 @@ app.get("/health", (req, res) => {
     });
 });
 
-app.get("/debug/db", async (req, res) => {
-  const result = await pool.query("SELECT NOW() AS current_time");
-  res.json(result.rows[0]);
-});
-
 // Auth routes
 // POST /auth/login - Authenticate user and return JWT token
 // POST /auth/signup - Create a new user account and return JWT token
 // PATCH /auth/change-password - Change the logged-in user's password
 // DELETE /auth/delete-account - Delete the logged-in user's account and all their tasks
 
-app.use("/auth", authRoutes);
+app.use("/auth", authLimiter, authRoutes); // Apply authentication rate limiting to auth routes
 
 // Task routes
 // GET /tasks - Get all tasks
